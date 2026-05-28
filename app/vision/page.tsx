@@ -10,10 +10,10 @@ const HERO_SRC = `${APPLE}/v/apple-vision-pro/k/images/overview/hero/hero__cvgr5
 // AI-generated image placeholders. Filled in as generations complete.
 const IMG_HERO_GEN = "https://d8j0ntlcm91z4.cloudfront.net/user_3DxBo99HJvxybARA2JFX2iglDJU/hf_20260528_203923_58d54932-2f79-4a5d-a5cb-10e745638ffc.png";
 const IMG_DESIGN = "https://d8j0ntlcm91z4.cloudfront.net/user_3DxBo99HJvxybARA2JFX2iglDJU/hf_20260528_204552_15903848-b3ee-451d-a25a-f0f3da32b54d.png";
-const IMG_BAND = img(800, 600, "Dual Knit Band", "light");
+const IMG_BAND = "https://d8j0ntlcm91z4.cloudfront.net/user_3DxBo99HJvxybARA2JFX2iglDJU/hf_20260528_211714_5f87e912-8dac-4728-a1a0-cc5e013addbf.png";
 const IMG_BATTERY = "https://d8j0ntlcm91z4.cloudfront.net/user_3DxBo99HJvxybARA2JFX2iglDJU/hf_20260528_204827_f1e15b10-7e69-48d3-ae85-c0bef71572e8.png";
-const IMG_ENTERTAINMENT = img(800, 600, "Entertainment", "dark");
-const IMG_PRODUCTIVITY = img(800, 600, "Productivity", "light");
+const IMG_ENTERTAINMENT = "https://d8j0ntlcm91z4.cloudfront.net/user_3DxBo99HJvxybARA2JFX2iglDJU/hf_20260528_212006_7874a672-1486-4770-9864-f3f10f458c4f.png";
+const IMG_PRODUCTIVITY = "https://d8j0ntlcm91z4.cloudfront.net/user_3DxBo99HJvxybARA2JFX2iglDJU/hf_20260528_212258_4f6029a6-9c39-4056-b53f-cf15ea866728.png";
 const IMG_PERSONA = "https://d8j0ntlcm91z4.cloudfront.net/user_3DxBo99HJvxybARA2JFX2iglDJU/hf_20260528_205304_ed61e884-17f5-4705-9c06-d9089c948f19.png";
 const IMG_VISIONOS = "https://d8j0ntlcm91z4.cloudfront.net/user_3DxBo99HJvxybARA2JFX2iglDJU/hf_20260528_205719_45f0e02f-66fc-49d7-9782-03a96797b70d.png";
 
