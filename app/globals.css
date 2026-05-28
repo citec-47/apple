@@ -81,6 +81,17 @@ body {
 }
 .pulse-glow { animation: pulseGlow 4s ease-in-out infinite; }
 
+/* Ken Burns — slow zoom + drift, gives a still hero a video-like feel */
+@keyframes kenBurns {
+  0% { transform: scale(1) translate3d(0, 0, 0); }
+  100% { transform: scale(1.08) translate3d(-1.5%, -1.5%, 0); }
+}
+.ken-burns {
+  animation: kenBurns 18s ease-in-out infinite alternate;
+  transform-origin: center center;
+  will-change: transform;
+}
+
 /* Hover lift */
 .hover-lift {
   transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),

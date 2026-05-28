@@ -1,7 +1,6 @@
 import Link from "next/link";
 import HotlinkImage from "@/components/HotlinkImage";
 import GetToKnowMac, { type Topic } from "@/components/GetToKnowMac";
-import { img } from "@/lib/img";
 
 const APPLE = "https://www.apple.com";
 
@@ -660,13 +659,15 @@ export default function VisionPage() {
             <Link href="#" className="text-appleBlue text-base hover:underline">Buy ›</Link>
           </div>
           <div className="mt-12 reveal delay-3">
-            <HotlinkImage
-              src={HERO_SRC}
-              fallback={IMG_HERO_GEN}
-              alt="Apple Vision Pro with Dual Knit Band"
-              className="mx-auto w-full max-w-5xl rounded-2xl"
-              loading="eager"
-            />
+            <div className="mx-auto w-full max-w-5xl overflow-hidden rounded-2xl bg-appleGray-100">
+              <HotlinkImage
+                src={HERO_SRC}
+                fallback={IMG_HERO_GEN}
+                alt="Apple Vision Pro with Dual Knit Band"
+                className="block h-full w-full object-cover ken-burns"
+                loading="eager"
+              />
+            </div>
           </div>
         </div>
       </section>
