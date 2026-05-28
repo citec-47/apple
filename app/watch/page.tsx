@@ -3,6 +3,7 @@ import HotlinkImage from "@/components/HotlinkImage";
 import GetToKnowMac, { type Topic } from "@/components/GetToKnowMac";
 import WhyBuyMac, { type WhyBuyItem } from "@/components/WhyBuyMac";
 import LineupCarousel, { type LineupModel } from "@/components/LineupCarousel";
+import WatchSubNav from "@/components/WatchSubNav";
 import { img } from "@/lib/img";
 
 const APPLE = "https://www.apple.com";
@@ -377,20 +378,6 @@ const TOPICS: Topic[] = [
   },
 ];
 
-const SUB_NAV = [
-  { label: "Series 11", href: "#", isNew: true },
-  { label: "SE 3", href: "#", isNew: true },
-  { label: "Ultra 3", href: "#", isNew: true },
-  { label: "Nike", href: "#" },
-  { label: "Hermès", href: "#" },
-  { label: "Compare", href: "#" },
-  { label: "Bands", href: "#" },
-  { label: "Accessories", href: "#" },
-  { label: "Fitness+", href: "#" },
-  { label: "Shop Watch", href: "#" },
-  { label: "watchOS 26", href: "#" },
-];
-
 const MADE_FOR_EACH_OTHER = [
   {
     title: "Apple Watch and iPhone",
@@ -409,43 +396,19 @@ const MADE_FOR_EACH_OTHER = [
 export default function WatchPage() {
   return (
     <div className="bg-white">
+      {/* Icon sub-nav */}
+      <WatchSubNav />
+
       {/* Education savings banner */}
       <section className="bg-appleGray-100 py-3 text-center text-sm">
         <p>
-          <span className="font-semibold text-appleGray-900">
-            Now you can buy Apple Watch with education savings.
-          </span>{" "}
+          Now you can buy Apple Watch<sup className="text-[10px]">1</sup> with education savings.
+          <sup className="text-[10px]">±</sup>{" "}
           <Link href="#" className="text-appleBlue hover:underline">
             Shop ›
           </Link>
         </p>
       </section>
-
-      {/* Sticky sub-nav */}
-      <nav className="sticky top-11 z-30 border-b border-appleGray-200 bg-white/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-appleWide items-center overflow-x-auto px-6 text-sm">
-          <Link href="/watch" className="py-3 pr-6 font-semibold text-appleGray-900">
-            Watch
-          </Link>
-          <ul className="flex flex-1 items-center gap-6 py-3">
-            {SUB_NAV.map((item) => (
-              <li key={item.label} className="whitespace-nowrap">
-                <Link
-                  href={item.href}
-                  className="text-appleGray-700 hover:text-appleGray-900"
-                >
-                  {item.label}
-                  {item.isNew && (
-                    <span className="ml-1 text-[10px] font-semibold text-orange-500">
-                      New
-                    </span>
-                  )}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </nav>
 
       {/* Page title */}
       <section className="bg-appleGray-100 pt-16 pb-12">
