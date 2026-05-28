@@ -24,9 +24,10 @@ export interface Topic {
 
 interface Props {
   topics: Topic[];
+  title?: string;
 }
 
-export default function GetToKnowMac({ topics }: Props) {
+export default function GetToKnowMac({ topics, title = "Get to know Mac." }: Props) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   useEffect(() => {
@@ -48,7 +49,7 @@ export default function GetToKnowMac({ topics }: Props) {
   return (
     <section className="section-light py-24">
       <div className="mx-auto max-w-appleWide px-6">
-        <h2 className="headline-lg reveal">Get to know Mac.</h2>
+        <h2 className="headline-lg reveal">{title}</h2>
 
         <div className="-mx-6 mt-10 overflow-x-auto px-6 pb-4">
           <ul className="flex min-w-max gap-5 snap-x">
