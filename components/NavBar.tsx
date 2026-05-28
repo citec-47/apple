@@ -12,7 +12,7 @@ const NAV: { label: string; href: string; menu: string }[] = [
   { label: "iPad", href: "/ipad", menu: "ipad" },
   { label: "iPhone", href: "/iphone", menu: "iphone" },
   { label: "Watch", href: "/watch", menu: "watch" },
-  { label: "Vision", href: "#", menu: "vision" },
+  { label: "Vision", href: "/vision", menu: "vision" },
   { label: "AirPods", href: "/airpods", menu: "airpods" },
   { label: "TV & Home", href: "/tv", menu: "tv" },
   { label: "Entertainment", href: "#", menu: "entertainment" },
