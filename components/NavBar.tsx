@@ -448,11 +448,12 @@ export default function NavBar() {
           ))}
         </ul>
 
-        <div className="hidden items-center gap-5 lg:flex">
+        <div className="flex items-center gap-5">
           <button
             type="button"
             aria-label="Search"
             onMouseEnter={() => open("search")}
+            onClick={() => (active === "search" ? close() : open("search"))}
             className="opacity-80 hover:opacity-100"
           >
             <SearchIcon />
@@ -460,18 +461,17 @@ export default function NavBar() {
           <button type="button" aria-label="Bag" className="opacity-80 hover:opacity-100">
             <BagIcon />
           </button>
+          <button
+            type="button"
+            onClick={() => setMobileOpen((v) => !v)}
+            aria-label="Toggle menu"
+            aria-expanded={mobileOpen ? "true" : "false"}
+            className="px-1 lg:hidden"
+          >
+            <span className="block h-px w-5 bg-white" />
+            <span className="mt-1 block h-px w-5 bg-white" />
+          </button>
         </div>
-
-        <button
-          type="button"
-          onClick={() => setMobileOpen((v) => !v)}
-          aria-label="Toggle menu"
-          aria-expanded={mobileOpen ? "true" : "false"}
-          className="px-3 lg:hidden"
-        >
-          <span className="block h-px w-5 bg-white" />
-          <span className="mt-1 block h-px w-5 bg-white" />
-        </button>
       </nav>
 
       {/* Mega-menu panels */}
@@ -543,8 +543,8 @@ function MegaPanel({ columns }: { columns: MenuColumn[] }) {
 
 function SearchPanel() {
   return (
-    <div className="absolute inset-x-0 top-11 hidden border-t border-white/5 bg-black/95 backdrop-blur-md lg:block menu-in">
-      <div className="mx-auto max-w-appleWide px-12 pt-10 pb-16">
+    <div className="absolute inset-x-0 top-11 border-t border-white/5 bg-black/95 backdrop-blur-md menu-in">
+      <div className="mx-auto max-w-appleWide px-6 pt-8 pb-12 md:px-12 md:pt-10 md:pb-16">
         <label className="flex items-center gap-4 border-b border-white/15 pb-3">
           <SearchIcon big />
           <input

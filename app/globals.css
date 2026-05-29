@@ -156,7 +156,7 @@ body {
   backdrop-filter: saturate(180%) blur(20px);
 }
 .nav-blur-dark {
-  background: rgba(0, 0, 0, 0.92);
+  background: #000;
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   backdrop-filter: saturate(180%) blur(20px);
 }
