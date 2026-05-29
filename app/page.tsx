@@ -1,258 +1,169 @@
 import Link from "next/link";
+import { desc, eq } from "drizzle-orm";
+import { db } from "@/db/client";
+import { products } from "@/db/schema";
+import { BRAND, CATEGORIES } from "@/lib/brand";
+import { formatMoney } from "@/lib/money";
 import HotlinkImage from "@/components/HotlinkImage";
 import { img } from "@/lib/img";
 
-const APPLE = "https://www.apple.com";
+export const dynamic = "force-dynamic";
 
-interface Section {
-  eyebrow?: string;
-  title: string;
-  subtitle?: string;
-  ctas?: { label: string; href: string; variant?: "primary" | "ghost" | "link" }[];
-  bg: string;
-  fallback: string;
-  alt: string;
-  theme?: "light" | "dark";
-  align?: "top" | "bottom";
-}
+export default async function HomePage() {
+  const featured = await db
+    .select()
+    .from(products)
+    .where(eq(products.isActive, true))
+    .orderBy(desc(products.createdAt))
+    .limit(8);
 
-const HEROES: Section[] = [
-  {
-    eyebrow: "iPhone 17 Pro",
-    title: "All out Pro.",
-    ctas: [
-      { label: "Learn more", href: "/iphone", variant: "link" },
-      { label: "Buy", href: "/shop/buy/iphone-17-pro", variant: "link" },
-    ],
-    bg: `${APPLE}/v/home/cm/images/heroes/iphone-17-pro/hero_iphone_17_pro__bknyzxfk2agi_large.jpg`,
-    fallback: img(2880, 1600, "iPhone 17 Pro", "dark"),
-    alt: "iPhone 17 Pro",
-    theme: "dark",
-    align: "top",
-  },
-  {
-    eyebrow: "MacBook Pro",
-    title: "Now with M5, M5 Pro, and M5 Max.",
-    ctas: [
-      { label: "Learn more", href: "/mac", variant: "link" },
-      { label: "Buy", href: "/shop/buy/macbook-pro", variant: "link" },
-    ],
-    bg: `${APPLE}/v/home/cm/images/heroes/macbook-pro/hero_macbook_pro__b4hqnjg4iuly_large.jpg`,
-    fallback: img(2880, 1600, "MacBook Pro", "light"),
-    alt: "MacBook Pro",
-    theme: "light",
-    align: "top",
-  },
-  {
-    eyebrow: "iPhone 17",
-    title: "Magichromatic.",
-    ctas: [
-      { label: "Learn more", href: "/iphone", variant: "link" },
-      { label: "Buy", href: "/shop/buy/iphone-17", variant: "link" },
-    ],
-    bg: `${APPLE}/v/home/cm/images/heroes/iphone-17/hero_iphone_17__c5vvimu9a20y_large.jpg`,
-    fallback: img(2880, 1600, "iPhone 17", "light"),
-    alt: "iPhone 17",
-    theme: "light",
-    align: "top",
-  },
-];
-
-const PROMOS: Section[] = [
-  {
-    title: "Apple Worldwide Developers Conference.",
-    subtitle: "Join us online June 8–12.",
-    ctas: [{ label: "Learn more", href: "#", variant: "link" }],
-    bg: `${APPLE}/v/home/cn/images/promos/wwdc26-announce/promo_wwdc26_announce_b__b58bcmqvfwia_large.jpg`,
-    fallback: img(1440, 1000, "WWDC 26", "dark"),
-    alt: "WWDC 26",
-    theme: "dark",
-    align: "top",
-  },
-  {
-    eyebrow: "Apple for College",
-    title: "Mac and iPad. Major in any field.",
-    ctas: [{ label: "Learn more", href: "#", variant: "link" }],
-    bg: `${APPLE}/v/home/cn/images/promos/college-students-2026/promo_college_students__bxqdcoxgjzw2_large.jpg`,
-    fallback: img(1440, 1000, "Apple for College", "light"),
-    alt: "Apple for College",
-    theme: "light",
-    align: "top",
-  },
-  {
-    eyebrow: "iPad Air",
-    title: "Now supercharged by M4.",
-    ctas: [
-      { label: "Learn more", href: "/ipad", variant: "link" },
-      { label: "Buy", href: "/shop/buy/ipad-pro", variant: "link" },
-    ],
-    bg: `${APPLE}/v/home/cm/images/promos/ipad-air-m4/promo_ipad_air_m4__f9ie3h3pzr6m_large.jpg`,
-    fallback: img(1440, 1000, "iPad Air", "light"),
-    alt: "iPad Air with M4",
-    theme: "light",
-    align: "top",
-  },
-  {
-    eyebrow: "Apple Card",
-    title: "Special new Apple Card and AirPods Pro 3 offer.",
-    subtitle: "Limitations and spend requirements apply.¹",
-    ctas: [{ label: "Learn more", href: "#", variant: "link" }],
-    bg: `${APPLE}/v/home/cn/images/promos/apple-card-airpods/promo_apple_card_airpods__cq0gu2a9hxkm_large.jpg`,
-    fallback: img(1440, 1000, "Apple Card", "light"),
-    alt: "Apple Card and AirPods Pro 3 offer",
-    theme: "light",
-    align: "top",
-  },
-  {
-    eyebrow: "Apple Trade In",
-    title: "Get up to $195–$695 in credit when you trade in iPhone 13 or higher.²",
-    ctas: [{ label: "Get your estimate", href: "#", variant: "link" }],
-    bg: `${APPLE}/v/home/cm/images/promos/iphone-tradein/promo_iphone_tradein__bugw15ka691e_large.jpg`,
-    fallback: img(1440, 1000, "Apple Trade In", "light"),
-    alt: "Apple Trade In",
-    theme: "light",
-    align: "top",
-  },
-  {
-    title: "Any condition carrier deals are here.",
-    subtitle:
-      "Select carriers accept eligible trade-in devices in any condition. Other offers available.³",
-    ctas: [{ label: "Find your deal", href: "#", variant: "link" }],
-    bg: `${APPLE}/v/home/cm/images/promos/carriers/promo_carrier__e0izvxwqosgi_large.jpg`,
-    fallback: img(1440, 1000, "Carrier deals", "light"),
-    alt: "Carrier deals",
-    theme: "light",
-    align: "top",
-  },
-];
-
-const ENTERTAINMENT = [
-  { title: "Maximum Pleasure Guaranteed", brand: "Apple TV", img: img(800, 450, "Maximum Pleasure", "dark") },
-  { title: "Margo's Got Money Troubles", brand: "Apple TV", img: img(800, 450, "Margo's Got Money", "dark") },
-  { title: "F1 on Apple TV", brand: "Apple TV", img: img(800, 450, "F1 on Apple TV", "dark") },
-  { title: "Widows Bay", brand: "Apple TV", img: img(800, 450, "Widows Bay", "dark") },
-  { title: "MLS on Apple TV", brand: "Apple TV", img: img(800, 450, "MLS on Apple TV", "dark") },
-  { title: "Your Friends & Neighbors", brand: "Apple TV", img: img(800, 450, "Friends & Neighbors", "dark") },
-  { title: "Friday Night Baseball", brand: "Apple TV", img: img(800, 450, "Friday Night Baseball", "dark") },
-  { title: "Imperfect Women", brand: "Apple TV", img: img(800, 450, "Imperfect Women", "dark") },
-  { title: "Ted Lasso", brand: "Apple TV", img: img(800, 450, "Ted Lasso", "dark") },
-];
-
-function HeroSection({ s, full }: { s: Section; full: boolean }) {
-  const dark = s.theme === "dark";
-  const align = s.align ?? "top";
   return (
-    <article
-      className={`relative overflow-hidden ${
-        full ? "min-h-[692px] md:min-h-[692px]" : "min-h-[580px]"
-      } reveal`}
-    >
-      <HotlinkImage
-        src={s.bg}
-        fallback={s.fallback}
-        alt={s.alt}
-        className="absolute inset-0 h-full w-full object-cover"
-        loading="lazy"
-      />
-      <div
-        className={`relative z-10 mx-auto flex h-full max-w-appleWide flex-col items-center px-6 ${
-          align === "top" ? "pt-12 md:pt-16" : "justify-end pb-12 md:pb-16"
-        } text-center ${dark ? "text-white" : "text-appleGray-900"}`}
-        style={{ minHeight: full ? 692 : 580 }}
-      >
-        {s.eyebrow && (
-          <p className="text-base md:text-xl font-semibold tracking-tight">{s.eyebrow}</p>
-        )}
-        <h2
-          className={`mt-1 ${full ? "headline-xl" : "headline-lg"} max-w-3xl`}
-        >
-          {s.title}
-        </h2>
-        {s.subtitle && (
-          <p className="mt-3 max-w-2xl text-sm md:text-base opacity-90">{s.subtitle}</p>
-        )}
-        {s.ctas && s.ctas.length > 0 && (
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
-            {s.ctas.map((c, i) => (
+    <div className="bg-white">
+      {/* Hero */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#0a0a1a] via-[#1a1a3a] to-[#2a1a4a] text-white">
+        <div
+          className="absolute inset-0 opacity-30"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 20% 30%, rgba(91,141,239,0.4) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(123,95,238,0.4) 0%, transparent 40%)",
+          }}
+        />
+        <div className="relative mx-auto max-w-appleWide px-6 py-20 md:py-32">
+          <p className="text-sm font-semibold uppercase tracking-widest text-white/70">
+            {BRAND.name} · {BRAND.year}
+          </p>
+          <h1 className="mt-4 max-w-3xl text-5xl font-semibold leading-[1.05] tracking-tight md:text-7xl">
+            <span className="bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
+              {BRAND.tagline}
+            </span>
+          </h1>
+          <p className="mt-6 max-w-xl text-lg text-white/80">
+            {BRAND.longDescription}
+          </p>
+          <div className="mt-10 flex flex-wrap gap-4">
+            <Link
+              href="/shop/category/phones"
+              className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 text-sm font-semibold text-black transition-transform hover:scale-105"
+            >
+              Shop the lineup
+            </Link>
+            <Link
+              href="/search"
+              className="inline-flex items-center gap-2 rounded-full border border-white/30 px-7 py-3 text-sm font-semibold text-white hover:bg-white/10"
+            >
+              Browse everything
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Category tiles */}
+      <section className="bg-appleGray-100 py-16">
+        <div className="mx-auto max-w-appleWide px-6">
+          <h2 className="text-2xl font-semibold text-appleGray-900">Shop by category</h2>
+          <p className="mt-2 text-appleGray-700">Six categories. Hand-picked devices.</p>
+          <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
+            {CATEGORIES.map((c) => (
               <Link
-                key={c.label + i}
-                href={c.href}
-                className={
-                  c.variant === "primary"
-                    ? "btn-pill btn-pill-primary"
-                    : c.variant === "ghost"
-                    ? "btn-pill btn-pill-ghost"
-                    : "text-appleBlue text-base hover:underline"
-                }
+                key={c.slug}
+                href={`/shop/category/${c.slug}`}
+                className="group relative aspect-square overflow-hidden rounded-3xl p-6 text-white transition-transform hover:scale-[1.02]"
+                style={{ backgroundColor: c.accent }}
               >
-                {c.label}
-                {c.variant === "link" || c.variant === undefined ? " ›" : ""}
+                <p className="text-base font-semibold">{c.label}</p>
+                <p className="mt-1 text-xs text-white/80">{c.tagline}</p>
+                <p className="absolute bottom-4 right-4 text-2xl opacity-80 transition-opacity group-hover:opacity-100">→</p>
               </Link>
             ))}
           </div>
-        )}
-      </div>
-    </article>
-  );
-}
-
-export default function HomePage() {
-  return (
-    <div className="bg-appleGray-100">
-      {/* Full-width heroes */}
-      <div className="flex flex-col gap-3 bg-appleGray-100">
-        {HEROES.map((s) => (
-          <HeroSection key={s.title} s={s} full />
-        ))}
-
-        {/* Promo grid — pairs */}
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          {PROMOS.slice(0, 2).map((s) => (
-            <HeroSection key={s.title} s={s} full={false} />
-          ))}
         </div>
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          {PROMOS.slice(2, 4).map((s) => (
-            <HeroSection key={s.title} s={s} full={false} />
-          ))}
-        </div>
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          {PROMOS.slice(4, 6).map((s) => (
-            <HeroSection key={s.title} s={s} full={false} />
-          ))}
-        </div>
-      </div>
+      </section>
 
-      {/* Endless Entertainment carousel */}
-      <section className="section-light py-20 mt-3">
+      {/* Featured products from DB */}
+      <section className="bg-white py-20">
         <div className="mx-auto max-w-appleWide px-6">
-          <h2 className="headline-lg reveal">
-            Endless entertainment, all on Apple devices.
-          </h2>
-          <p className="mt-3 text-appleGray-700 reveal delay-1">
-            From blockbuster TV to live sports, music, and more.
-          </p>
-          <div className="-mx-6 mt-10 overflow-x-auto px-6 pb-4 scrollbar-thin">
-            <div className="flex gap-4 snap-x snap-mandatory">
-              {ENTERTAINMENT.map((e, i) => (
-                <div
-                  key={e.title}
-                  className={`snap-start shrink-0 w-[300px] md:w-[420px] overflow-hidden rounded-2xl bg-black hover-lift parallax-up delay-${(i % 4) + 1}`}
-                >
-                  <img
-                    src={e.img}
-                    alt={e.title}
-                    className="aspect-video w-full object-cover"
+          <div className="flex items-end justify-between">
+            <div>
+              <h2 className="text-3xl font-semibold text-appleGray-900">Featured this week</h2>
+              <p className="mt-2 text-appleGray-700">Live from our shop. Tap to configure.</p>
+            </div>
+            <Link href="/search" className="hidden text-sm font-medium text-[#5b8def] hover:underline md:inline">
+              See all →
+            </Link>
+          </div>
+          <div className="mt-10 grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
+            {featured.map((p) => (
+              <Link
+                key={p.id}
+                href={`/shop/buy/${p.slug}`}
+                className="group flex flex-col overflow-hidden rounded-3xl bg-appleGray-100 p-5 transition-shadow hover:shadow-lg"
+              >
+                <div className="aspect-square overflow-hidden rounded-2xl bg-white">
+                  <HotlinkImage
+                    src={p.heroImage ?? ""}
+                    fallback={img(400, 400, p.name, "light")}
+                    alt={p.name}
+                    className="h-full w-full object-cover transition-transform group-hover:scale-105"
                     loading="lazy"
                   />
-                  <div className="p-4 text-white">
-                    <p className="text-xs uppercase tracking-widest opacity-70">{e.brand}</p>
-                    <p className="mt-1 text-base font-medium">{e.title}</p>
-                  </div>
                 </div>
-              ))}
-            </div>
+                <div className="mt-4 flex flex-1 flex-col">
+                  <p className="text-[11px] font-semibold uppercase tracking-widest text-[#5b8def]">{p.category}</p>
+                  <h3 className="mt-1 text-base font-semibold text-appleGray-900">{p.name}</h3>
+                  <p className="mt-1 line-clamp-2 text-xs text-appleGray-700">{p.tagline ?? ""}</p>
+                  <p className="mt-3 text-sm font-semibold text-appleGray-900">From {formatMoney(p.basePriceCents)}</p>
+                </div>
+              </Link>
+            ))}
           </div>
+        </div>
+      </section>
+
+      {/* Value props strip */}
+      <section className="bg-appleGray-900 py-14 text-white">
+        <div className="mx-auto grid max-w-appleWide grid-cols-1 gap-8 px-6 md:grid-cols-3">
+          <div>
+            <p className="text-2xl">🚚</p>
+            <p className="mt-3 text-sm font-semibold">Free 2-day delivery</p>
+            <p className="mt-1 text-xs text-white/70">On every order, no minimum. Same-day in select cities.</p>
+          </div>
+          <div>
+            <p className="text-2xl">↩️</p>
+            <p className="mt-3 text-sm font-semibold">30-day returns</p>
+            <p className="mt-1 text-xs text-white/70">Change your mind? Send it back, free. No questions.</p>
+          </div>
+          <div>
+            <p className="text-2xl">🔒</p>
+            <p className="mt-3 text-sm font-semibold">2-year warranty</p>
+            <p className="mt-1 text-xs text-white/70">Every {BRAND.name} device comes with built-in coverage.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA band */}
+      <section className="bg-white py-20">
+        <div className="mx-auto max-w-appleWide px-6 text-center">
+          <h2 className="text-4xl font-semibold tracking-tight text-appleGray-900 md:text-5xl">
+            Find what you need in seconds.
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl text-appleGray-700">
+            Use search to jump straight to a product, a category, or an accessory.
+          </p>
+          <form action="/search" className="mx-auto mt-8 flex max-w-2xl items-center gap-3 rounded-full border border-appleGray-300 bg-white px-5 py-3 shadow-sm focus-within:border-[#5b8def]">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-appleGray-500" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" />
+              <path strokeLinecap="round" d="M21 21l-4-4" />
+            </svg>
+            <input
+              name="q"
+              type="search"
+              placeholder="Try “phone”, “laptop”, “watch”…"
+              className="flex-1 bg-transparent text-base outline-none placeholder:text-appleGray-500"
+            />
+            <button type="submit" className="rounded-full bg-black px-5 py-2 text-sm font-semibold text-white hover:bg-black/80">
+              Search
+            </button>
+          </form>
         </div>
       </section>
     </div>
