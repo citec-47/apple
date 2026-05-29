@@ -458,9 +458,9 @@ export default function NavBar() {
           >
             <SearchIcon />
           </button>
-          <button type="button" aria-label="Bag" className="opacity-80 hover:opacity-100">
+          <Link href="/cart" aria-label="Bag" className="opacity-80 hover:opacity-100">
             <BagIcon />
-          </button>
+          </Link>
           <button
             type="button"
             onClick={() => setMobileOpen((v) => !v)}

@@ -49,6 +49,7 @@ const MODELS: LineupModel[] = [
     src: IMG_PRO_HERO,
     fallback: img(800, 600, "AirPods Pro 3", "light"),
     href: "#",
+    buyHref: "/shop/buy/airpods-pro-3",
     price: "$249",
     monthly: "or $20.75/mo. for 12 mo.◊",
   },

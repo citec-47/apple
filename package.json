@@ -10,6 +10,7 @@
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:migrate": "tsx scripts/migrate.ts",
+    "db:seed-products": "tsx scripts/seed-products.ts",
     "db:list-users": "tsx scripts/list-users.ts",
     "create-admin": "tsx scripts/create-admin.ts"
   },

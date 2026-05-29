@@ -13,6 +13,7 @@ export interface LineupModel {
   src: string;
   fallback: string;
   href: string;
+  buyHref?: string;
   price: string;
   monthly: string;
 }
@@ -81,7 +82,7 @@ export default function LineupCarousel({ models }: Props) {
                   >
                     Learn more
                   </Link>
-                  <Link href={m.href} className="text-xs text-appleBlue hover:underline">
+                  <Link href={m.buyHref ?? m.href} className="text-xs text-appleBlue hover:underline">
                     Buy ›
                   </Link>
                 </div>

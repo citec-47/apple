@@ -13,8 +13,9 @@ interface NavItem {
 const NAV: NavItem[] = [
   { label: "Dashboard", href: "/admin", icon: "dashboard" },
   { label: "Products", href: "/admin/products", icon: "box" },
-  { label: "Media", href: "/admin/media", icon: "image" },
   { label: "Orders", href: "/admin/orders", icon: "receipt" },
+  { label: "Visitors", href: "/admin/visitors", icon: "globe" },
+  { label: "Media", href: "/admin/media", icon: "image" },
   { label: "Users", href: "/admin/users", icon: "users" },
   { label: "Settings", href: "/admin/settings", icon: "gear" },
 ];
@@ -194,7 +195,8 @@ type IconKey =
   | "users"
   | "gear"
   | "external"
-  | "database";
+  | "database"
+  | "globe";
 
 function NavIcon({ icon }: { icon: IconKey }) {
   const props = {
@@ -272,6 +274,14 @@ function NavIcon({ icon }: { icon: IconKey }) {
           <ellipse cx="12" cy="5" rx="9" ry="3" />
           <path d="M3 5v6c0 1.66 4 3 9 3s9-1.34 9-3V5" />
           <path d="M3 11v6c0 1.66 4 3 9 3s9-1.34 9-3v-6" />
+        </svg>
+      );
+    case "globe":
+      return (
+        <svg {...props}>
+          <circle cx="12" cy="12" r="10" />
+          <line x1="2" y1="12" x2="22" y2="12" />
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
         </svg>
       );
   }
