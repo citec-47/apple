@@ -8,7 +8,7 @@ const MODELS = [
     tagline: "Titanium.",
     sub: "From $999 or $41.62/mo.",
     img: IMG.iphone15Pro,
-    href: "/iphone/15-pro",
+    href: "/shop/buy/iphone-17-pro",
     dark: true,
   },
   {
@@ -17,7 +17,7 @@ const MODELS = [
     tagline: "Newphoria.",
     sub: "From $799 or $33.29/mo.",
     img: IMG.iphone15,
-    href: "#",
+    href: "/shop/buy/iphone-17",
   },
   {
     id: "14",
@@ -25,7 +25,7 @@ const MODELS = [
     tagline: "As amazing as ever.",
     sub: "From $599 or $24.95/mo.",
     img: IMG.iphone14,
-    href: "#",
+    href: "/shop/buy/iphone-17",
   },
   {
     id: "se",
@@ -33,7 +33,7 @@ const MODELS = [
     tagline: "Serious power. Serious value.",
     sub: "From $429 or $17.87/mo.",
     img: IMG.iphoneSE,
-    href: "#",
+    href: "/shop/buy/iphone-17",
   },
 ];
 

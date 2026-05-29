@@ -30,7 +30,7 @@ export default function MacBookProPage() {
             Supercharged by M3, M3 Pro, and M3 Max.
           </p>
           <div className="mt-6 flex justify-center gap-4 reveal delay-2">
-            <button className="btn-pill btn-pill-primary">Buy</button>
+            <Link href="/shop/buy/macbook-pro" className="btn-pill btn-pill-primary">Buy</Link>
             <Link href="#specs" className="btn-link">See tech specs</Link>
           </div>
           <img
@@ -90,7 +90,7 @@ export default function MacBookProPage() {
       <section className="section-light pb-24 text-center">
         <h3 className="headline-lg reveal">Make it yours.</h3>
         <div className="mt-6 flex justify-center gap-4 reveal delay-1">
-          <button className="btn-pill btn-pill-primary">Buy MacBook Pro</button>
+          <Link href="/shop/buy/macbook-pro" className="btn-pill btn-pill-primary">Buy MacBook Pro</Link>
           <Link href="/mac" className="btn-pill btn-pill-ghost">Compare all Mac</Link>
         </div>
       </section>

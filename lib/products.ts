@@ -59,3 +59,41 @@ export async function toggleProductActiveAction(formData: FormData): Promise<voi
   await db.update(products).set({ isActive: !isActive, updatedAt: new Date() }).where(eq(products.id, id));
   redirect("/admin/products");
 }
+
+export async function updateProductAction(formData: FormData): Promise<void> {
+  const id = Number(formData.get("id"));
+  if (!id) return;
+
+  const name = String(formData.get("name") ?? "").trim();
+  const category = String(formData.get("category") ?? "").trim();
+  const tagline = String(formData.get("tagline") ?? "").trim();
+  const slug = String(formData.get("slug") ?? "").trim();
+  const basePrice = Number(formData.get("basePrice") ?? 0);
+  const heroImage = String(formData.get("heroImage") ?? "").trim();
+  const optionsJson = String(formData.get("options") ?? "{}");
+  const isActive = formData.get("isActive") === "on";
+
+  let options: ProductOptions = {};
+  try {
+    options = JSON.parse(optionsJson);
+  } catch {
+    options = {};
+  }
+
+  await db
+    .update(products)
+    .set({
+      name,
+      category,
+      slug,
+      tagline: tagline || null,
+      basePriceCents: Math.round(basePrice * 100),
+      heroImage: heroImage || null,
+      options,
+      isActive,
+      updatedAt: new Date(),
+    })
+    .where(eq(products.id, id));
+
+  redirect("/admin/products");
+}

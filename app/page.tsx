@@ -22,7 +22,7 @@ const HEROES: Section[] = [
     title: "All out Pro.",
     ctas: [
       { label: "Learn more", href: "/iphone", variant: "link" },
-      { label: "Buy", href: "/iphone", variant: "link" },
+      { label: "Buy", href: "/shop/buy/iphone-17-pro", variant: "link" },
     ],
     bg: `${APPLE}/v/home/cm/images/heroes/iphone-17-pro/hero_iphone_17_pro__bknyzxfk2agi_large.jpg`,
     fallback: img(2880, 1600, "iPhone 17 Pro", "dark"),
@@ -35,7 +35,7 @@ const HEROES: Section[] = [
     title: "Now with M5, M5 Pro, and M5 Max.",
     ctas: [
       { label: "Learn more", href: "/mac", variant: "link" },
-      { label: "Buy", href: "/mac", variant: "link" },
+      { label: "Buy", href: "/shop/buy/macbook-pro", variant: "link" },
     ],
     bg: `${APPLE}/v/home/cm/images/heroes/macbook-pro/hero_macbook_pro__b4hqnjg4iuly_large.jpg`,
     fallback: img(2880, 1600, "MacBook Pro", "light"),
@@ -48,7 +48,7 @@ const HEROES: Section[] = [
     title: "Magichromatic.",
     ctas: [
       { label: "Learn more", href: "/iphone", variant: "link" },
-      { label: "Buy", href: "/iphone", variant: "link" },
+      { label: "Buy", href: "/shop/buy/iphone-17", variant: "link" },
     ],
     bg: `${APPLE}/v/home/cm/images/heroes/iphone-17/hero_iphone_17__c5vvimu9a20y_large.jpg`,
     fallback: img(2880, 1600, "iPhone 17", "light"),
@@ -84,7 +84,7 @@ const PROMOS: Section[] = [
     title: "Now supercharged by M4.",
     ctas: [
       { label: "Learn more", href: "/ipad", variant: "link" },
-      { label: "Buy", href: "/ipad", variant: "link" },
+      { label: "Buy", href: "/shop/buy/ipad-pro", variant: "link" },
     ],
     bg: `${APPLE}/v/home/cm/images/promos/ipad-air-m4/promo_ipad_air_m4__f9ie3h3pzr6m_large.jpg`,
     fallback: img(1440, 1000, "iPad Air", "light"),

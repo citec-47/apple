@@ -28,7 +28,7 @@ export default function IPhone15Pro() {
             <span className="gradient-text">Titanium.</span> So strong. So light. So Pro.
           </h1>
           <div className="mt-6 flex justify-center gap-4 reveal delay-2">
-            <button className="btn-pill btn-pill-primary">Buy</button>
+            <Link href="/shop/buy/iphone-17-pro" className="btn-pill btn-pill-primary">Buy</Link>
             <Link href="#design" className="btn-link">Watch the film</Link>
           </div>
           <img
@@ -111,7 +111,7 @@ export default function IPhone15Pro() {
         <div className="mx-auto max-w-appleWide px-6 text-center">
           <h3 className="headline-lg reveal">Ready to upgrade?</h3>
           <div className="mt-6 flex justify-center gap-4 reveal delay-1">
-            <button className="btn-pill btn-pill-primary">Buy iPhone 15 Pro</button>
+            <Link href="/shop/buy/iphone-17-pro" className="btn-pill btn-pill-primary">Buy iPhone 15 Pro</Link>
             <Link href="/iphone" className="btn-pill btn-pill-ghost">
               Compare all iPhone
             </Link>

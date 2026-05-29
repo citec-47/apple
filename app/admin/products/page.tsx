@@ -69,6 +69,9 @@ export default async function ProductsPage() {
                   </td>
                   <td className="px-5 py-4 text-right">
                     <div className="inline-flex items-center gap-1">
+                      <Link href={`/admin/products/${p.id}/edit`} className="rounded-lg border border-appleGray-300 px-3 py-1 text-xs font-medium hover:bg-appleGray-100">
+                        Edit
+                      </Link>
                       <Link href={`/shop/buy/${p.slug}`} target="_blank" className="rounded-lg border border-appleGray-300 px-3 py-1 text-xs font-medium hover:bg-appleGray-100">
                         View
                       </Link>
