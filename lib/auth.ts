@@ -1,0 +1,71 @@
+import NextAuth, { type NextAuthConfig } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+import { eq } from "drizzle-orm";
+import { db } from "@/db/client";
+import { users } from "@/db/schema";
+import { verifyPassword } from "./password";
+
+type Role = "owner" | "editor";
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      email: string;
+      role: Role;
+    };
+  }
+  interface User {
+    id?: string;
+    role?: Role;
+  }
+}
+
+export const authConfig: NextAuthConfig = {
+  session: { strategy: "jwt" },
+  pages: { signIn: "/admin/login" },
+  providers: [
+    Credentials({
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        const email = String(credentials?.email ?? "").trim().toLowerCase();
+        const password = String(credentials?.password ?? "");
+        if (!email || !password) return null;
+
+        const row = await db.query.users.findFirst({
+          where: eq(users.email, email),
+        });
+        if (!row) return null;
+
+        const ok = await verifyPassword(password, row.passwordHash);
+        if (!ok) return null;
+
+        return {
+          id: String(row.id),
+          email: row.email,
+          role: row.role as Role,
+        };
+      },
+    }),
+  ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.sub = user.id;
+        (token as { role?: Role }).role = (user as { role?: Role }).role;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token.sub) session.user.id = token.sub;
+      const role = (token as { role?: Role }).role;
+      if (role) session.user.role = role;
+      return session;
+    },
+  },
+};
+
+export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
