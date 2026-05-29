@@ -1,5 +1,42 @@
 import Link from "next/link";
+import HotlinkImage from "@/components/HotlinkImage";
 import AccessoryBrowser from "@/components/AccessoryBrowser";
+import { img } from "@/lib/img";
+
+const CDN = "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is";
+
+// Real apple.com Store CDN URLs (extracted from the live shop pages).
+const PRODUCT_IMAGES = {
+  techwovenCase: `${CDN}/MGF44?wid=532&hei=582&fmt=png-alpha&.v=U2pkbzQ0MHdwUU54RGE3Ynp2ajY0QUhqc0NvK2RZTVd5TWVhUDFuQlo0MEVMWC9xbVh4KzA2U0tUUXprZWhodmlPT2h0WHpsRlBNRE91R0xWOHdsTGc`,
+  iphone17SiliconeCase: `${CDN}/MHVQ4_FV401?wid=1420&hei=930&fmt=png-alpha&.v=NDlNSEY4dWYwTW1Ja3cwL3paSDlnRUJTMHZrdGM3YVhOamhhQWtVbXVxSEhxZjQyanFrTDN5a241WlpqRHdlVDM0SlZQU3NQSHlNYkFsZCtpYmJ0WkE`,
+  iphone17eSiliconeCase: `${CDN}/MHWF4?wid=532&hei=582&fmt=png-alpha&.v=blpHMkFBUDJkRVJpMXZmeEs2cnZaUUhqc0NvK2RZTVd5TWVhUDFuQlo0MXd0Wk9sajhyMU55WS9GRFJ6dlp6amhDZEMvSFdQWWh0ZlA4cXNmVW83SVE`,
+  crossbodyStrap: `${CDN}/MHYX4?wid=532&hei=582&fmt=png-alpha&.v=dEtBeEVIaTMzc3hFNmQ5aEpmTloxZ0hqc0NvK2RZTVd5TWVhUDFuQlo0MDZLa0ZhcGhyM3hZZHkxT051RDA2d21kT1hCTDRBV1Z2MHFvcUcvQkFCM0E`,
+  iphoneAirCase: `${CDN}/MGH34?wid=532&hei=582&fmt=png-alpha&.v=MzM0b2FteXRYLzNjb2ROdjA5akRhUUhqc0NvK2RZTVd5TWVhUDFuQlo0MHhZcjdWMHRqdlJLYjZkK3BOWEpkQWRHR2R2TWU1RzFGOHkrQnNHR3RSMlE`,
+  applePencilPro: `${CDN}/MX2D3?wid=532&hei=582&fmt=png-alpha&.v=YVo4RFdhVU5yOEtndnBqTVBDZytYQUhqc0NvK2RZTVd5TWVhUDFuQlo0MlVSVEd3WGxyWkRkbCttOFdLT3Y0VUdXQ1pIVUZFeHUrOEx0QnlPY1lrdWc`,
+  magicKeyboardIpadAirBlack: `${CDN}/MGYY4_FV401_GEO_US?wid=1420&hei=930&fmt=png-alpha&.v=cXFITEJiVHJneThsNzB1c1dHallack93N2ptdVY3YnhocStTK0NwU3BkSTJIbGNwQ3FINUZXNytOeFd0WEY2ckpPTFA0YlRMK0w0UUhqUzhwRUxPclcvbGF6R3UrWFlxWUREYWYxU3NtcVE`,
+  smartFolioIpadAirSage: `${CDN}/MWK73?wid=532&hei=582&fmt=png-alpha&.v=QWd2YXd4Um1rb1JSeHFHSUxVUmRkZ0hqc0NvK2RZTVd5TWVhUDFuQlo0MWhjVHd0KzFCcHdjc1ZkU0ZlazcrWDRIeXVid1BXOU9Pa0RQcnhSdFVWOWc`,
+  magicKeyboardIpadProWhite: `${CDN}/MWR03?wid=532&hei=582&fmt=png-alpha&.v=WGdQQmYxTHpudDRaTi9PcXplejZiQUhqc0NvK2RZTVd5TWVhUDFuQlo0M3VJK2RiQkFEb1A5SXpwN1pFQWVxMk5LZnl4Z2NLUk15aUJVVGNTenFYalE`,
+  applePencilUsbC: `${CDN}/MUWA3?wid=532&hei=582&fmt=png-alpha&.v=MWxxejZka05YVWIrWnl0NXZuUklYQUhqc0NvK2RZTVd5TWVhUDFuQlo0MGorUDVBOUI1cTBZQVBWUytzNUoxSEdTU21VeUx6cEpCL0VEQm9uN1FQSlE`,
+  powerAdapter40W: `${CDN}/MGKN4?wid=532&hei=582&fmt=png-alpha&.v=T0lOcnNHdkZoVHZXUE1wQk9tZ1A4d0hqc0NvK2RZTVd5TWVhUDFuQlo0M0NzdzNDT1N4VEJGYnliSWtxOW1wYWxkajZ1cGQ5WVZidWhPak1Ga21BOGc`,
+  studioDisplay: `${CDN}/MFEX4?wid=1420&hei=930&fmt=png-alpha&.v=dHN0TVZvczlPY0c3TFg0WktjODh6blhxNEZUZDRrSTNYTWl6R2dBdTdxUHhRaC84S0V6YjI5Z0xwY2txZ1U3eWxwRUM1ZzRUODRyVWxyU0tIcnQ1dmc`,
+  studioDisplayXDR: `${CDN}/MFEL4?wid=532&hei=582&fmt=png-alpha&.v=eHV6SzVxYnErY1lnZnFGbm43MnRld0hqc0NvK2RZTVd5TWVhUDFuQlo0M3YzcG5UekJGa1NTUlI3aFMvTS8vbThEd1FhZ3hucDd1d3NPNU1Ydzhsdmc`,
+  magicKeyboardTouchId: `${CDN}/MXK83?wid=532&hei=582&fmt=png-alpha&.v=eFlJa0thaHg0Zk5Uc3lIcElEZThBZ0hqc0NvK2RZTVd5TWVhUDFuQlo0MWlQcU93cWwvb0J4b2lHc01aQ3FTRmpTVDErb2pvVFNyNGl4TzdpOGhXQnc`,
+  magicMouse: `${CDN}/MXK63?wid=532&hei=582&fmt=png-alpha&.v=QnNzVEw4ZWFrcDAyd0dVR2h6eGpMUUhqc0NvK2RZTVd5TWVhUDFuQlo0MFgyc213MCtPWGVtdXJJZ0RZeUVsYTAyRDl6R2VMekg2TUo4L1RVSE5EZ2c`,
+  sportBand: `${CDN}/MHYH4ref_FV501?wid=532&hei=582&fmt=png-alpha&.v=a2xTTEx3V2JBbSsrM05YeVpWOHQ0LzFsZmNiME9WSGpaazRyMjZBZXNDYlRmMUFhaXkzWVI4b3hpbGUzQlh3YUgwTEI4eHdvRmhQQ3VoYVBzVlpISnc`,
+  sportLoopPride: `${CDN}/MJ5C4_FV401?wid=1420&hei=930&fmt=png-alpha&.v=NXVDTHJVenFsZTJpUFFKMzI4cVRwRUJTMHZrdGM3YVhOamhhQWtVbXVxSEhxZjQyanFrTDN5a241WlpqRHdlVHNEeTNpVDdUQU16MlRpT3dBQ3U4L3c`,
+  milaneseLoop: `${CDN}/MGJ44ref_FV401?wid=532&hei=582&fmt=png-alpha&.v=azFJTFNCR0xtc09ReHZYa1RNeEZVZjFsZmNiME9WSGpaazRyMjZBZXNDYlRmMUFhaXkzWVI4b3hpbGUzQlh3YVpxZTBKWGNjQkI0NTVJVTA1UlpiNGc`,
+  nikeSportLoop: `${CDN}/MGD24_FV401?wid=532&hei=582&fmt=png-alpha&.v=bXhyOUg3SHlTRFZ0QkM5M21wUFZwQ1AyQkRuTmdJem9TZ0dDa0s1WkZVbjJDbFRqd09tZGpzYlFSbUlUOURibWxQcjBXbW9KWGR2N3Q2cEJmanZnMXc`,
+  braidedSoloLoop: `${CDN}/MFMP4ref_FV401?wid=532&hei=582&fmt=png-alpha&.v=eDhOcTk1NEdDbVQyWmQ0V1Z4Tjh6ZjFsZmNiME9WSGpaazRyMjZBZXNDYlRmMUFhaXkzWVI4b3hpbGUzQlh3YUlHcDVXZVJRekYwdUVFUGk2bFd2blE`,
+};
+
+const BANNER_IMAGES = {
+  iphoneMagsafe: `${CDN}/iphone-magsafe-header-accessories-202603?wid=2880&hei=960&fmt=png-alpha&.v=WjEyRExLV0FFRnNnU0s4SkhGUS9ZNmVzMjJZL0dPQVFuajNQRU8yMGdMR3ZaeWJXMDArQWdvRG5WQXA4d2tNVzhmajVaNGY3VWFpQytQbGVsVkd0L2V6TjdEcFFOUXljQ0RBVUNTdEpRdm9WNklaSWZZRHl4UEptU2lTUDlwYUo`,
+  homepodMini: `${CDN}/homepod-mini-accessories-202110?wid=2140&hei=532&fmt=jpeg&qlt=90&.v=aE9lTjA3MVZ1TzRkdVVQVW5JOHBJdVFPK3JlTEtyd0VIWFFDYmN6Rm16ZVhsTitNWlY2Z050L3A0WDFSNUY0QWJGcXNRQnFCV0w3WVRjTExvdm1ic2FWOE5SM2k4dGZwUXpkRE5DVlZVTVVVRk5BYjU4dkMrYjBKSjFqVXFOVGg`,
+  macThunderbolt: `${CDN}/mac-cables-accessories-usbc-202203?wid=1972&hei=116&fmt=png-alpha&.v=RmVXSjRVQXk2THdQZm1GRFZPTVg4aXFPem9vV0pudzVNeEp0VjRBQXVxdmRURGpPUXhPTHNCUVNxNmtHdGNQNXBoVTZveC9hV09oRG5aNURGN1RUQStVamFobU5FU1ZjeXB1SGNuUVFQNTE5SGwrVW1WWGxTS3o5bDl1ek5hbVY`,
+  macMagsafe: `${CDN}/mac-cables-accessories-magsafe-202203?wid=2304&hei=240&fmt=png-alpha&.v=RmVXSjRVQXk2THdQZm1GRFZPTVg4dUZ2YXRBWUh4OWFXL0YwN1lNR0VqY2owQ05tUVVxYytFN2hvVnB5OGhsQmllcldheldCZ2k0cFgzbW1HRDRSRFEvbG5PdUJITitNTmI0UGFIeHhSWC9rdDdCTDhveW1zNmdsQjlLdEwxTHc`,
+  airpodsEngraving: `${CDN}/airpods-acc-inpage-engraving-202509?wid=2140&hei=462&fmt=png-alpha&.v=RDhmMFBPelB0Yk9HTml5ckVuaDFKNXFhdC9JSXVGdDMwR3M4OERZMTJBL2xGbGRIem82S2xXRFhQMWtuc0F1eDdJZ0syZnIrZFhEZU1NQ0RuWEJlSmQ0RnludndGMzFRZkhTM2N0NUllSE5veWoxS3p3UVBVbWtaaTZ6WUE2UTU`,
+  appleCarePlusMac: `${CDN}/mac-alp-applecare-plus-202603?wid=1220&hei=410&fmt=jpeg&qlt=90&.v=Uk1PMlhZeW5BYXBQTUwwdGE2a3EzcWJTWW1wYWJzNHZ1cmZUVTdDTFRQclM2S3ZwQmdzU3NBSjJQQWs5b2V1d3ZvdUZlR0V0VUdJSjBWaDVNVG95Yk1NM2tzTG5QZ3ZMOGZXYVppeUdSVkE`,
+};
 
 const CATEGORIES = [
   { label: "Mac", href: "/mac", icon: "mac" as const },
@@ -33,62 +70,44 @@ const FILTER_CHIPS = [
   "Storage",
 ];
 
-const THEMED_SECTIONS = [
-  {
-    eyebrow: "Style in a Snap",
-    title: "Cases, sleeves and skins for every device.",
-    body:
-      "From clear MagSafe cases for iPhone to leather sleeves for MacBook, dress the gear you carry every day in something that fits how you live.",
-    cta: "Shop Cases & Protection",
-    bg: "from-[#f7e8cf] via-[#f4d4c0] to-[#e5c4d2]",
-    accent: "#1d1d1f",
-  },
-  {
-    eyebrow: "Charging Essentials",
-    title: "Cables, adapters and chargers — always have one handy.",
-    body:
-      "USB-C, MagSafe, Lightning, the wall, the car, the desk: find the right charging solution for every device in every room.",
-    cta: "Shop Charging Essentials",
-    bg: "from-[#d6f0ff] via-[#bce4ff] to-[#9ccbff]",
-    accent: "#0b3a66",
-  },
-  {
-    eyebrow: "Home Office",
-    title: "Set up your workspace just right.",
-    body:
-      "Stands, hubs, monitors, lights, microphones and keyboards — the gear that turns a corner of the kitchen into a real workspace.",
-    cta: "Shop Home Office",
-    bg: "from-[#e8e2f4] via-[#d0c0e8] to-[#b39ddb]",
-    accent: "#3c1f5e",
-  },
-  {
-    eyebrow: "Creative Tools",
-    title: "Bring the creative gear with you.",
-    body:
-      "Apple Pencil, drawing pads, color-true monitors, audio interfaces and the cables to glue it all together — for the work you make.",
-    cta: "Shop Creative Tools",
-    bg: "from-[#ffe3d6] via-[#ffc4a5] to-[#ff8b6e]",
-    accent: "#5a1f0a",
-  },
-  {
-    eyebrow: "Health & Fitness",
-    title: "Move better with the right gear.",
-    body:
-      "Apple Watch bands for the workout, the office and the trail — plus scales, heart-rate monitors, mounts and more from the brands you trust.",
-    cta: "Shop Health & Fitness",
-    bg: "from-[#d4f0d6] via-[#a8d8a7] to-[#7ac09a]",
-    accent: "#1d4a2a",
-  },
-  {
-    eyebrow: "Sound Essentials",
-    title: "Headphones and speakers for every kind of listening.",
-    body:
-      "From AirPods Pro for focus, to HomePod for the whole room, to over-ear cans for the studio — find the sound that fits how you listen.",
-    cta: "Shop Headphones and Speakers",
-    bg: "from-[#1d1d1f] via-[#2a2a35] to-[#0a0a0a]",
-    accent: "#ffffff",
-    dark: true,
-  },
+interface Product {
+  name: string;
+  price: string;
+  src: string;
+  newBadge?: boolean;
+}
+
+const NEW_ARRIVALS: Product[] = [
+  { name: "iPhone 17 Pro TechWoven Case", price: "$59.00", src: PRODUCT_IMAGES.techwovenCase, newBadge: true },
+  { name: "iPhone 17 Silicone Case", price: "$49.00", src: PRODUCT_IMAGES.iphone17SiliconeCase, newBadge: true },
+  { name: "iPhone 17e Silicone Case", price: "$49.00", src: PRODUCT_IMAGES.iphone17eSiliconeCase, newBadge: true },
+  { name: "Crossbody Strap", price: "$59.00", src: PRODUCT_IMAGES.crossbodyStrap, newBadge: true },
+  { name: "iPhone Air Case", price: "$49.00", src: PRODUCT_IMAGES.iphoneAirCase, newBadge: true },
+  { name: "Apple Pencil Pro", price: "$129.00", src: PRODUCT_IMAGES.applePencilPro },
+];
+
+const IPAD_PRODUCTS: Product[] = [
+  { name: "Magic Keyboard for iPad Air 13\" (M4) — Black", price: "$319.00", src: PRODUCT_IMAGES.magicKeyboardIpadAirBlack },
+  { name: "Magic Keyboard for iPad Pro 11\" (M5) — White", price: "$299.00", src: PRODUCT_IMAGES.magicKeyboardIpadProWhite },
+  { name: "Smart Folio for iPad Air 11\" (M4) — Sage", price: "$79.00", src: PRODUCT_IMAGES.smartFolioIpadAirSage },
+  { name: "Apple Pencil Pro", price: "$129.00", src: PRODUCT_IMAGES.applePencilPro },
+  { name: "Apple Pencil (USB-C)", price: "$79.00", src: PRODUCT_IMAGES.applePencilUsbC },
+];
+
+const MAC_PRODUCTS: Product[] = [
+  { name: "Studio Display", price: "From $1,599.00", src: PRODUCT_IMAGES.studioDisplay, newBadge: true },
+  { name: "Studio Display XDR", price: "From $3,299.00", src: PRODUCT_IMAGES.studioDisplayXDR, newBadge: true },
+  { name: "Magic Keyboard with Touch ID and Numeric Keypad", price: "$199.00", src: PRODUCT_IMAGES.magicKeyboardTouchId },
+  { name: "Magic Mouse", price: "$99.00", src: PRODUCT_IMAGES.magicMouse },
+  { name: "40W Dynamic Power Adapter", price: "$39.00", src: PRODUCT_IMAGES.powerAdapter40W },
+];
+
+const WATCH_BANDS: Product[] = [
+  { name: "Sport Loop (Pride Edition)", price: "$49.00", src: PRODUCT_IMAGES.sportLoopPride, newBadge: true },
+  { name: "Sport Band", price: "$49.00", src: PRODUCT_IMAGES.sportBand },
+  { name: "Milanese Loop", price: "$99.00", src: PRODUCT_IMAGES.milaneseLoop },
+  { name: "Nike Sport Loop", price: "$49.00", src: PRODUCT_IMAGES.nikeSportLoop },
+  { name: "Braided Solo Loop (Only at Apple)", price: "$99.00", src: PRODUCT_IMAGES.braidedSoloLoop },
 ];
 
 const BENEFITS = [
@@ -111,6 +130,66 @@ const BENEFITS = [
     icon: "card" as const,
   },
 ];
+
+function ProductCard({ product, large = false }: { product: Product; large?: boolean }) {
+  return (
+    <Link
+      href="#"
+      className={`group flex flex-col rounded-2xl bg-appleGray-100 p-6 hover-lift ${
+        large ? "" : ""
+      }`}
+    >
+      {product.newBadge && (
+        <p className="text-[11px] font-semibold uppercase tracking-widest text-appleBlue">
+          New
+        </p>
+      )}
+      <div className={`flex items-center justify-center ${large ? "aspect-[4/3]" : "aspect-square"} mt-2 overflow-hidden rounded-xl bg-white p-4`}>
+        <HotlinkImage
+          src={product.src}
+          fallback={img(400, 400, product.name.slice(0, 18), "light")}
+          alt={product.name}
+          className="h-full w-full object-contain"
+          loading="lazy"
+        />
+      </div>
+      <h3 className="mt-4 text-[15px] font-semibold leading-snug text-appleGray-900">
+        {product.name}
+      </h3>
+      <p className="mt-1 text-[15px] text-appleGray-700">{product.price}</p>
+      <span className="mt-3 inline-flex items-center gap-1 text-sm text-appleBlue group-hover:underline">
+        Buy ›
+      </span>
+    </Link>
+  );
+}
+
+function ProductRow({ products, title }: { products: Product[]; title: string }) {
+  return (
+    <section className="section-light py-12">
+      <div className="mx-auto max-w-appleWide px-6">
+        <div className="flex items-end justify-between gap-6 reveal">
+          <h2 className="text-2xl font-semibold text-appleGray-900">{title}</h2>
+          <Link href="#" className="hidden text-sm text-appleBlue hover:underline md:inline-block">
+            Shop all ›
+          </Link>
+        </div>
+        <div className="-mx-6 mt-6 overflow-x-auto px-6 pb-4 scroll-smooth">
+          <ul className="flex min-w-max gap-4 snap-x">
+            {products.map((p, i) => (
+              <li
+                key={p.name}
+                className={`shrink-0 w-[260px] snap-start parallax-up delay-${(i % 4) + 1}`}
+              >
+                <ProductCard product={p} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function AccessoriesPage() {
   return (
@@ -156,6 +235,24 @@ export default function AccessoriesPage() {
         </div>
       </section>
 
+      {/* iPhone MagSafe banner */}
+      <section className="bg-white py-6">
+        <div className="mx-auto max-w-appleWide px-6">
+          <Link href="#" className="block overflow-hidden rounded-3xl reveal hover-lift">
+            <HotlinkImage
+              src={BANNER_IMAGES.iphoneMagsafe}
+              fallback={img(2880, 960, "iPhone MagSafe", "light")}
+              alt="iPhone MagSafe accessories"
+              className="w-full h-auto"
+              loading="lazy"
+            />
+          </Link>
+        </div>
+      </section>
+
+      {/* New arrivals */}
+      <ProductRow products={NEW_ARRIVALS} title="New arrivals." />
+
       {/* Shop by category chips */}
       <section className="bg-appleGray-100 py-12">
         <div className="mx-auto max-w-appleWide px-6">
@@ -182,66 +279,94 @@ export default function AccessoriesPage() {
         </div>
       </section>
 
-      {/* Tabbed browse interface */}
-      <AccessoryBrowser />
+      {/* iPad accessories row */}
+      <ProductRow products={IPAD_PRODUCTS} title="iPad essentials." />
 
-      {/* Themed promotional sections */}
-      <section className="section-light py-12">
-        <div className="mx-auto max-w-appleWide px-6 space-y-6">
-          {THEMED_SECTIONS.map((s, i) => (
-            <article
-              key={s.eyebrow}
-              className={`relative overflow-hidden rounded-3xl bg-gradient-to-br ${s.bg} px-10 py-16 reveal delay-${(i % 4) + 1}`}
-              style={{ color: s.accent }}
-            >
-              <div className="relative max-w-2xl">
-                <p className="text-sm font-semibold uppercase tracking-widest opacity-80">
-                  {s.eyebrow}
-                </p>
-                <h3 className={`mt-3 headline-lg ${s.dark ? "text-white" : ""}`}>
-                  {s.title}
-                </h3>
-                <p className={`mt-4 text-base leading-relaxed ${s.dark ? "text-white/80" : "opacity-80"}`}>
-                  {s.body}
-                </p>
-                <Link
-                  href="#"
-                  className={`mt-6 inline-flex items-center gap-1 text-base font-medium hover:underline ${
-                    s.dark ? "text-white" : ""
-                  }`}
-                >
-                  {s.cta} ›
-                </Link>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      {/* Apple Card offer banner */}
-      <section className="bg-white py-12">
+      {/* AirPods engraving banner */}
+      <section className="bg-white py-6">
         <div className="mx-auto max-w-appleWide px-6">
-          <article className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#7ac09a] via-[#f7c79b] to-[#e892b5] p-12 reveal">
-            <div className="relative max-w-3xl">
-              <p className="text-sm font-semibold uppercase tracking-widest text-appleGray-900/80">
-                Apple Card Limited-Time Offer
-              </p>
-              <h3 className="mt-3 headline-lg text-appleGray-900">
-                Get a new Apple Card. Buy AirPods Pro 3 at Apple. Earn back the cost, up to $250 Daily Cash.◊
-              </h3>
-              <p className="mt-3 text-sm text-appleGray-900/70">
-                Limitations and spend requirements apply.
-              </p>
-              <Link
-                href="#"
-                className="mt-6 inline-flex btn-pill btn-pill-primary"
-              >
-                Learn more
-              </Link>
-            </div>
-          </article>
+          <Link href="#" className="block overflow-hidden rounded-3xl reveal hover-lift">
+            <HotlinkImage
+              src={BANNER_IMAGES.airpodsEngraving}
+              fallback={img(2140, 462, "AirPods Engraving", "light")}
+              alt="AirPods engraving"
+              className="w-full h-auto"
+              loading="lazy"
+            />
+          </Link>
         </div>
       </section>
+
+      {/* Mac accessories row */}
+      <ProductRow products={MAC_PRODUCTS} title="Mac essentials." />
+
+      {/* Mac cables banner */}
+      <section className="bg-white py-6">
+        <div className="mx-auto max-w-appleWide px-6 space-y-4">
+          <Link href="#" className="block overflow-hidden rounded-3xl bg-appleGray-100 p-8 reveal hover-lift">
+            <p className="text-sm font-semibold uppercase tracking-widest text-appleGray-500 mb-2">
+              Thunderbolt 4 Pro Cable
+            </p>
+            <h3 className="text-2xl font-semibold mb-4">Thunderbolt 4 (USB-C) Pro Cable</h3>
+            <HotlinkImage
+              src={BANNER_IMAGES.macThunderbolt}
+              fallback={img(1972, 116, "Thunderbolt cable", "light")}
+              alt="Thunderbolt 4 cable"
+              className="w-full h-auto"
+              loading="lazy"
+            />
+          </Link>
+          <Link href="#" className="block overflow-hidden rounded-3xl bg-appleGray-100 p-8 reveal delay-1 hover-lift">
+            <p className="text-sm font-semibold uppercase tracking-widest text-appleGray-500 mb-2">
+              MagSafe 3 Cable
+            </p>
+            <h3 className="text-2xl font-semibold mb-4">USB-C to MagSafe 3 Cable (2 m)</h3>
+            <HotlinkImage
+              src={BANNER_IMAGES.macMagsafe}
+              fallback={img(2304, 240, "MagSafe 3 cable", "light")}
+              alt="MagSafe 3 cable"
+              className="w-full h-auto"
+              loading="lazy"
+            />
+          </Link>
+        </div>
+      </section>
+
+      {/* Watch bands row */}
+      <ProductRow products={WATCH_BANDS} title="Apple Watch bands." />
+
+      {/* HomePod mini banner */}
+      <section className="bg-white py-6">
+        <div className="mx-auto max-w-appleWide px-6">
+          <Link href="#" className="block overflow-hidden rounded-3xl reveal hover-lift">
+            <HotlinkImage
+              src={BANNER_IMAGES.homepodMini}
+              fallback={img(2140, 532, "HomePod mini", "light")}
+              alt="HomePod mini"
+              className="w-full h-auto"
+              loading="lazy"
+            />
+          </Link>
+        </div>
+      </section>
+
+      {/* AppleCare+ banner */}
+      <section className="bg-white py-6">
+        <div className="mx-auto max-w-appleWide px-6">
+          <Link href="#" className="block overflow-hidden rounded-3xl reveal hover-lift">
+            <HotlinkImage
+              src={BANNER_IMAGES.appleCarePlusMac}
+              fallback={img(1220, 410, "AppleCare+ for Mac", "light")}
+              alt="AppleCare+ for Mac"
+              className="w-full h-auto"
+              loading="lazy"
+            />
+          </Link>
+        </div>
+      </section>
+
+      {/* Find a product (tabbed browser) */}
+      <AccessoryBrowser />
 
       {/* Benefits 3-up */}
       <section className="section-light py-20">
