@@ -15,7 +15,7 @@ const NAV: { label: string; href: string; menu: string }[] = [
   { label: "Vision", href: "/vision", menu: "vision" },
   { label: "AirPods", href: "/airpods", menu: "airpods" },
   { label: "TV & Home", href: "/tv", menu: "tv" },
-  { label: "Entertainment", href: "#", menu: "entertainment" },
+  { label: "Entertainment", href: "/services", menu: "entertainment" },
   { label: "Accessories", href: "#", menu: "accessories" },
   { label: "Support", href: "/support", menu: "support" },
 ];
