@@ -96,7 +96,7 @@ const APPLECARE = [
 // ─── Per-category recipes ───
 
 function phones(): Spec[] {
-  const series = ["Pulse", "Orbit", "Halo", "Edge", "Lumen", "Spark", "Arc", "Vista", "Solar", "Prism", "Flux", "Wave"];
+  const series = ["Pulse", "Orbit", "Halo", "Edge", "Lumen", "Spark", "Arc", "Vista", "Solar", "Prism", "Flux", "Wave", "Zenith", "Nebula", "Comet", "Nova", "Apex", "Quantum"];
   const tiers = [
     { label: "Lite", mult: 0.55 },
     { label: "Mini", mult: 0.7 },
@@ -105,6 +105,7 @@ function phones(): Spec[] {
     { label: "Pro", mult: 1.55 },
     { label: "Pro Max", mult: 1.85 },
     { label: "Ultra", mult: 2.2 },
+    { label: "Titan", mult: 2.6 },
   ];
   const years = ["2024", "2025", "2026"];
   const taglines = [
@@ -143,8 +144,9 @@ function phones(): Spec[] {
 }
 
 function laptops(): Spec[] {
-  const series = ["Aero", "Studio", "Forge", "Vista", "Pulse", "Lumen", "Halo", "Solar"];
+  const series = ["Aero", "Studio", "Forge", "Vista", "Pulse", "Lumen", "Halo", "Solar", "Apex", "Zenith", "Edge", "Nova"];
   const tiers = [
+    { label: "Lite", mult: 0.7 },
     { label: "Air", mult: 1.0 },
     { label: "Pro", mult: 1.6 },
     { label: "Pro Max", mult: 2.2 },
@@ -191,8 +193,9 @@ function laptops(): Spec[] {
 }
 
 function tablets(): Spec[] {
-  const series = ["Pulse", "Orbit", "Halo", "Lumen", "Spark", "Arc", "Vista", "Wave"];
+  const series = ["Pulse", "Orbit", "Halo", "Lumen", "Spark", "Arc", "Vista", "Wave", "Apex", "Nebula", "Zenith", "Nova", "Edge", "Solar"];
   const tiers = [
+    { label: "Lite", mult: 0.45 },
     { label: "Mini", mult: 0.6 },
     { label: "Standard", mult: 1.0 },
     { label: "Plus", mult: 1.4 },
@@ -239,14 +242,15 @@ function tablets(): Spec[] {
 }
 
 function watches(): Spec[] {
-  const series = ["Pulse", "Orbit", "Halo", "Edge", "Lumen", "Spark", "Arc", "Vista", "Solar", "Prism", "Flux", "Wave"];
+  const series = ["Pulse", "Orbit", "Halo", "Edge", "Lumen", "Spark", "Arc", "Vista", "Solar", "Prism", "Flux", "Wave", "Apex", "Zenith", "Nebula", "Nova"];
   const tiers = [
+    { label: "Lite", mult: 0.45 },
     { label: "Light", mult: 0.6 },
     { label: "Active", mult: 1.0 },
     { label: "Pro", mult: 1.6 },
     { label: "Ultra", mult: 2.4 },
   ];
-  const editions = ["", " Sport", " Elegance"];
+  const editions = ["", " Sport", " Elegance", " Adventure", " Classic"];
   const taglines = [
     "Heart, sleep, and movement on your wrist.",
     "Always-on display, all-day battery.",
@@ -281,15 +285,16 @@ function watches(): Spec[] {
 }
 
 function audio(): Spec[] {
-  // 3 sub-types × 8 series × 6 tiers ≈ 144
   const subtypes = [
     { id: "buds", label: "Buds", base: 6000 },
     { id: "headphones", label: "Headphones", base: 18000 },
     { id: "speaker", label: "Speaker", base: 12000 },
     { id: "soundbar", label: "Soundbar", base: 30000 },
     { id: "earbuds-sport", label: "Sport Buds", base: 5000 },
+    { id: "microphone", label: "Microphone", base: 11000 },
+    { id: "monitor", label: "Studio Monitor", base: 25000 },
   ];
-  const series = ["Pulse", "Orbit", "Halo", "Lumen", "Spark", "Arc", "Vista", "Wave"];
+  const series = ["Pulse", "Orbit", "Halo", "Lumen", "Spark", "Arc", "Vista", "Wave", "Apex", "Zenith", "Nova", "Nebula"];
   const tiers = [
     { label: "Lite", mult: 0.6 },
     { label: "Standard", mult: 1.0 },
@@ -333,20 +338,24 @@ function audio(): Spec[] {
 
 function home(): Spec[] {
   const subtypes = [
-    { id: "tv", label: "TV", base: 80000, sizes: [43, 50, 55, 65, 75, 85] },
+    { id: "tv", label: "TV", base: 80000, sizes: [43, 50, 55, 65, 75, 85, 98] },
     { id: "soundbar", label: "Soundbar", base: 35000, sizes: [0] },
     { id: "hub", label: "Smart Hub", base: 12000, sizes: [0] },
     { id: "speaker", label: "Speaker", base: 18000, sizes: [0] },
     { id: "camera", label: "Camera", base: 9000, sizes: [0] },
     { id: "doorbell", label: "Doorbell", base: 14000, sizes: [0] },
+    { id: "light", label: "Smart Light", base: 4500, sizes: [0] },
+    { id: "sensor", label: "Sensor", base: 3900, sizes: [0] },
+    { id: "thermostat", label: "Thermostat", base: 19900, sizes: [0] },
   ];
-  const series = ["Cinema", "Lumen", "Pulse", "Halo", "Spark", "Vista"];
+  const series = ["Cinema", "Lumen", "Pulse", "Halo", "Spark", "Vista", "Apex", "Zenith"];
   const tiers = [
     { label: "Lite", mult: 0.6 },
     { label: "Standard", mult: 1.0 },
     { label: "Plus", mult: 1.4 },
     { label: "Pro", mult: 2.0 },
     { label: "Studio", mult: 2.8 },
+    { label: "Reference", mult: 3.6 },
   ];
   const taglines = [
     "Cinema in your living room, no soundbar needed.",
@@ -398,10 +407,15 @@ function accessories(): Spec[] {
     { id: "stylus", label: "Stylus", base: 9900, watts: [] },
     { id: "tag", label: "Tag", base: 2900, watts: [] },
     { id: "remote", label: "Remote", base: 5900, watts: [] },
+    { id: "powerbank", label: "Power Bank", base: 5900, watts: [10000, 20000, 30000] },
+    { id: "adapter", label: "Adapter", base: 3900, watts: [] },
+    { id: "tripod", label: "Tripod", base: 4900, watts: [] },
+    { id: "lens", label: "Lens Kit", base: 8900, watts: [] },
   ];
-  const series = ["Pulse", "Lumen", "Spark", "Wave"];
+  const series = ["Pulse", "Lumen", "Spark", "Wave", "Apex", "Nova"];
   const tiers = [
     { label: "Standard", mult: 1.0 },
+    { label: "Plus", mult: 1.3 },
     { label: "Pro", mult: 1.6 },
     { label: "Studio", mult: 2.4 },
   ];
