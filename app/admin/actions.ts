@@ -19,18 +19,22 @@ export async function loginAction(
   if (!email || !password) return { error: "Email and password are required." };
 
   try {
+    // redirect:false prevents NextAuth from issuing its own redirect (which
+    // can resolve to AUTH_URL / localhost). We then redirect manually with
+    // Next.js's redirect(), which uses a relative URL the browser resolves
+    // against the current origin — so it always lands on the right domain.
     await signIn("credentials", {
       email,
       password,
-      redirectTo: "/admin",
+      redirect: false,
     });
-    return {};
   } catch (err) {
     if (err instanceof AuthError) {
       return { error: "Invalid email or password." };
     }
     throw err;
   }
+  redirect("/admin");
 }
 
 export async function signupAction(
@@ -63,12 +67,15 @@ export async function signupAction(
     role: "owner",
   });
 
-  await signIn("credentials", { email, password, redirectTo: "/admin" });
-  return {};
+  await signIn("credentials", { email, password, redirect: false });
+  redirect("/admin");
 }
 
 export async function logoutAction(): Promise<void> {
-  await signOut({ redirectTo: "/admin/login" });
+  // Same pattern: skip NextAuth's redirect, do it ourselves with a
+  // relative URL so we land on the current origin.
+  await signOut({ redirect: false });
+  redirect("/admin/login");
 }
 
 export async function inviteEditorAction(
