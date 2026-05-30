@@ -13,7 +13,7 @@ export const CATEGORY_HEROES: Record<string, string> = {
   watches: `${U}/photo-1622434641406-a158123450f9${W}`,
   audio: `${U}/photo-1545127398-14699f92334b${W}`,
   home: `${U}/photo-1593784991095-a205069470b6${W}`,
-  accessories: `${U}/photo-1606220589517-fcc9d2c97aaf${W}`,
+  accessories: `${U}/photo-1531986362435-16b427eb9c26${W}`,
 };
 
 export const HOMEPAGE_HERO = `${U}/photo-1531297484001-80022131f5a1?w=2400&h=1200&fit=crop&auto=format&q=80`;

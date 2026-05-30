@@ -65,11 +65,12 @@ export default async function CategoryPage({
   return (
     <div className="bg-white">
       <section className="relative overflow-hidden text-white" style={{ backgroundColor: cat.accent }}>
-        <img
+        <HotlinkImage
           src={CATEGORY_HEROES[cat.slug] ?? ""}
+          fallback={`https://picsum.photos/seed/${cat.slug}-hero/1600/720`}
           alt=""
-          aria-hidden="true"
           className="absolute inset-0 h-full w-full object-cover opacity-50"
+          loading="eager"
         />
         <div
           className="absolute inset-0 mix-blend-multiply"

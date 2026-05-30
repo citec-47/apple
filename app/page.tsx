@@ -69,11 +69,12 @@ export default async function HomePage() {
                 href={`/shop/category/${c.slug}`}
                 className="group relative aspect-square overflow-hidden rounded-3xl text-white transition-transform hover:scale-[1.02]"
               >
-                <img
+                <HotlinkImage
                   src={CATEGORY_HEROES[c.slug] ?? ""}
+                  fallback={`https://picsum.photos/seed/${c.slug}-tile/600/600`}
                   alt=""
-                  aria-hidden="true"
                   className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  loading="lazy"
                 />
                 <div
                   className="absolute inset-0 mix-blend-multiply opacity-70"
