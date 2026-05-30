@@ -14,4 +14,5 @@ export const CATEGORIES: { slug: string; label: string; tagline: string; accent:
   { slug: "watches", label: "Watches", tagline: "Health on your wrist.", accent: "#3ac39a" },
   { slug: "audio", label: "Audio", tagline: "Lossless, anywhere.", accent: "#f0a14b" },
   { slug: "home", label: "Home & TV", tagline: "Cinema, room-filled.", accent: "#9a7caa" },
+  { slug: "accessories", label: "Accessories", tagline: "Everything that connects.", accent: "#4ec5d6" },
 ];

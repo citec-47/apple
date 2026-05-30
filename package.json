@@ -14,7 +14,8 @@
     "db:list-users": "tsx scripts/list-users.ts",
     "create-admin": "tsx scripts/create-admin.ts",
     "set-role": "tsx scripts/set-role.ts",
-    "db:rebrand": "tsx scripts/rebrand-products.ts"
+    "db:rebrand": "tsx scripts/rebrand-products.ts",
+    "db:generate-catalog": "tsx scripts/generate-catalog.ts"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.2",

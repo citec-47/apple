@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { eq, and, desc } from "drizzle-orm";
+import { eq, and, desc, asc, sql } from "drizzle-orm";
 import { db } from "@/db/client";
 import { products } from "@/db/schema";
 import { BRAND, CATEGORIES } from "@/lib/brand";
@@ -10,43 +10,105 @@ import { img } from "@/lib/img";
 
 export const dynamic = "force-dynamic";
 
+const PER_PAGE = 36;
+
 export default async function CategoryPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ page?: string; sort?: string }>;
 }) {
   const { slug } = await params;
+  const sp = await searchParams;
   const cat = CATEGORIES.find((c) => c.slug === slug);
   if (!cat) notFound();
+
+  const sort = sp.sort ?? "newest";
+  const page = Math.max(1, Number(sp.page ?? "1") || 1);
+  const offset = (page - 1) * PER_PAGE;
+
+  const orderBy =
+    sort === "price-asc"
+      ? asc(products.basePriceCents)
+      : sort === "price-desc"
+      ? desc(products.basePriceCents)
+      : sort === "name"
+      ? asc(products.name)
+      : desc(products.createdAt);
+
+  const where = and(eq(products.category, cat.slug), eq(products.isActive, true));
 
   const list = await db
     .select()
     .from(products)
-    .where(and(eq(products.category, cat.slug), eq(products.isActive, true)))
-    .orderBy(desc(products.createdAt));
+    .where(where)
+    .orderBy(orderBy)
+    .limit(PER_PAGE)
+    .offset(offset);
+
+  const [{ n: total }] = await db
+    .select({ n: sql<number>`count(*)::int` })
+    .from(products)
+    .where(where);
+
+  const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
+
+  const qsFor = (overrides: Record<string, string>) => {
+    const params = new URLSearchParams();
+    params.set("sort", sort);
+    params.set("page", "1");
+    for (const [k, v] of Object.entries(overrides)) params.set(k, v);
+    return `?${params.toString()}`;
+  };
 
   return (
     <div className="bg-white">
       <section className="relative overflow-hidden text-white" style={{ backgroundColor: cat.accent }}>
-        <div className="mx-auto max-w-appleWide px-6 py-20">
+        <div className="mx-auto max-w-appleWide px-6 py-16 md:py-20">
           <p className="text-xs font-semibold uppercase tracking-widest text-white/80">
             {BRAND.name} · {cat.label}
           </p>
           <h1 className="mt-3 text-5xl font-semibold tracking-tight md:text-6xl">{cat.label}</h1>
           <p className="mt-3 max-w-xl text-lg text-white/90">{cat.tagline}</p>
+          <p className="mt-4 text-sm text-white/70">
+            {total.toLocaleString()} {total === 1 ? "product" : "products"} available
+          </p>
         </div>
       </section>
 
-      <section className="bg-appleGray-100 py-12">
+      <section className="bg-appleGray-100 py-10">
         <div className="mx-auto max-w-appleWide px-6">
-          <div className="flex items-end justify-between">
-            <p className="text-sm text-appleGray-700">
-              {list.length} product{list.length === 1 ? "" : "s"} in {cat.label.toLowerCase()}.
-            </p>
-            <Link href="/search" className="text-sm font-medium text-[#5b8def] hover:underline">
-              ← Back to search
-            </Link>
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap gap-2">
+              {CATEGORIES.filter((c) => c.slug !== slug).map((c) => (
+                <Link
+                  key={c.slug}
+                  href={`/shop/category/${c.slug}`}
+                  className="rounded-full bg-white px-4 py-1.5 text-xs font-medium text-appleGray-900 ring-1 ring-appleGray-300 hover:ring-[#5b8def]"
+                >
+                  {c.label}
+                </Link>
+              ))}
+            </div>
+            <form action={`/shop/category/${cat.slug}`} className="flex items-center gap-2">
+              <label className="text-xs text-appleGray-700">Sort</label>
+              <select
+                name="sort"
+                defaultValue={sort}
+                className="rounded-full border border-appleGray-300 bg-white px-3 py-1.5 text-xs"
+              >
+                <option value="newest">Newest</option>
+                <option value="price-asc">Price: low to high</option>
+                <option value="price-desc">Price: high to low</option>
+                <option value="name">Name A→Z</option>
+              </select>
+              <button type="submit" className="rounded-full bg-black px-3 py-1.5 text-xs font-medium text-white">
+                Apply
+              </button>
+            </form>
           </div>
+
           {list.length === 0 ? (
             <div className="mt-8 rounded-2xl border border-dashed border-appleGray-300 bg-white p-12 text-center">
               <p className="text-appleGray-700">No products in this category yet. Check back soon.</p>
@@ -69,7 +131,7 @@ export default async function CategoryPage({
                     />
                   </div>
                   <div className="mt-4 flex flex-1 flex-col">
-                    <h3 className="text-base font-semibold text-appleGray-900">{p.name}</h3>
+                    <h3 className="line-clamp-2 text-sm font-semibold text-appleGray-900">{p.name}</h3>
                     <p className="mt-1 line-clamp-2 text-xs text-appleGray-700">{p.tagline ?? ""}</p>
                     <p className="mt-3 text-sm font-semibold text-appleGray-900">
                       From {formatMoney(p.basePriceCents)}
@@ -77,6 +139,32 @@ export default async function CategoryPage({
                   </div>
                 </Link>
               ))}
+            </div>
+          )}
+
+          {totalPages > 1 && (
+            <div className="mt-10 flex items-center justify-between">
+              <p className="text-sm text-appleGray-700">
+                Page {page} of {totalPages}
+              </p>
+              <div className="flex gap-2">
+                {page > 1 && (
+                  <Link
+                    href={qsFor({ page: String(page - 1) })}
+                    className="rounded-full bg-white px-5 py-2 text-sm font-medium ring-1 ring-appleGray-300 hover:ring-[#5b8def]"
+                  >
+                    ← Previous
+                  </Link>
+                )}
+                {page < totalPages && (
+                  <Link
+                    href={qsFor({ page: String(page + 1) })}
+                    className="rounded-full bg-black px-5 py-2 text-sm font-medium text-white hover:bg-black/80"
+                  >
+                    Next →
+                  </Link>
+                )}
+              </div>
             </div>
           )}
         </div>
