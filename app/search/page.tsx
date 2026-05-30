@@ -5,7 +5,6 @@ import { products } from "@/db/schema";
 import { BRAND, CATEGORIES } from "@/lib/brand";
 import { formatMoney } from "@/lib/money";
 import HotlinkImage from "@/components/HotlinkImage";
-import { img } from "@/lib/img";
 
 export const dynamic = "force-dynamic";
 

@@ -5,7 +5,7 @@ import { products } from "@/db/schema";
 import { BRAND, CATEGORIES } from "@/lib/brand";
 import { formatMoney } from "@/lib/money";
 import HotlinkImage from "@/components/HotlinkImage";
-import { img } from "@/lib/img";
+import { HOMEPAGE_HERO, CATEGORY_HEROES } from "@/lib/hero-images";
 
 export const dynamic = "force-dynamic";
 
@@ -19,15 +19,15 @@ export default async function HomePage() {
 
   return (
     <div className="bg-white">
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#0a0a1a] via-[#1a1a3a] to-[#2a1a4a] text-white">
-        <div
-          className="absolute inset-0 opacity-30"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 20% 30%, rgba(91,141,239,0.4) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(123,95,238,0.4) 0%, transparent 40%)",
-          }}
+      {/* Hero with real product photo background */}
+      <section className="relative overflow-hidden bg-[#0a0a1a] text-white">
+        <img
+          src={HOMEPAGE_HERO}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover opacity-40"
         />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a1a]/90 via-[#1a1a3a]/70 to-[#2a1a4a]/80" />
         <div className="relative mx-auto max-w-appleWide px-6 py-20 md:py-32">
           <p className="text-sm font-semibold uppercase tracking-widest text-white/70">
             {BRAND.name} · {BRAND.year}
@@ -62,17 +62,31 @@ export default async function HomePage() {
         <div className="mx-auto max-w-appleWide px-6">
           <h2 className="text-2xl font-semibold text-appleGray-900">Shop by category</h2>
           <p className="mt-2 text-appleGray-700">Six categories. Hand-picked devices.</p>
-          <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
+          <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-7">
             {CATEGORIES.map((c) => (
               <Link
                 key={c.slug}
                 href={`/shop/category/${c.slug}`}
-                className="group relative aspect-square overflow-hidden rounded-3xl p-6 text-white transition-transform hover:scale-[1.02]"
-                style={{ backgroundColor: c.accent }}
+                className="group relative aspect-square overflow-hidden rounded-3xl text-white transition-transform hover:scale-[1.02]"
               >
-                <p className="text-base font-semibold">{c.label}</p>
-                <p className="mt-1 text-xs text-white/80">{c.tagline}</p>
-                <p className="absolute bottom-4 right-4 text-2xl opacity-80 transition-opacity group-hover:opacity-100">→</p>
+                <img
+                  src={CATEGORY_HEROES[c.slug] ?? ""}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div
+                  className="absolute inset-0 mix-blend-multiply opacity-70"
+                  style={{ backgroundColor: c.accent }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute inset-0 flex flex-col justify-between p-6">
+                  <p className="text-base font-semibold drop-shadow-lg">{c.label}</p>
+                  <div>
+                    <p className="text-xs text-white/90 drop-shadow">{c.tagline}</p>
+                    <p className="mt-2 text-2xl opacity-90 transition-opacity group-hover:opacity-100">→</p>
+                  </div>
+                </div>
               </Link>
             ))}
           </div>

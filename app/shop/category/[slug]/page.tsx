@@ -6,7 +6,7 @@ import { products } from "@/db/schema";
 import { BRAND, CATEGORIES } from "@/lib/brand";
 import { formatMoney } from "@/lib/money";
 import HotlinkImage from "@/components/HotlinkImage";
-import { img } from "@/lib/img";
+import { CATEGORY_HEROES } from "@/lib/hero-images";
 
 export const dynamic = "force-dynamic";
 
@@ -65,13 +65,24 @@ export default async function CategoryPage({
   return (
     <div className="bg-white">
       <section className="relative overflow-hidden text-white" style={{ backgroundColor: cat.accent }}>
-        <div className="mx-auto max-w-appleWide px-6 py-16 md:py-20">
-          <p className="text-xs font-semibold uppercase tracking-widest text-white/80">
+        <img
+          src={CATEGORY_HEROES[cat.slug] ?? ""}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover opacity-50"
+        />
+        <div
+          className="absolute inset-0 mix-blend-multiply"
+          style={{ backgroundColor: cat.accent, opacity: 0.55 }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent" />
+        <div className="relative mx-auto max-w-appleWide px-6 py-20 md:py-28">
+          <p className="text-xs font-semibold uppercase tracking-widest text-white/90 drop-shadow">
             {BRAND.name} · {cat.label}
           </p>
-          <h1 className="mt-3 text-5xl font-semibold tracking-tight md:text-6xl">{cat.label}</h1>
-          <p className="mt-3 max-w-xl text-lg text-white/90">{cat.tagline}</p>
-          <p className="mt-4 text-sm text-white/70">
+          <h1 className="mt-3 text-5xl font-semibold tracking-tight drop-shadow-lg md:text-6xl">{cat.label}</h1>
+          <p className="mt-3 max-w-xl text-lg text-white/95 drop-shadow">{cat.tagline}</p>
+          <p className="mt-4 text-sm text-white/90 drop-shadow">
             {total.toLocaleString()} {total === 1 ? "product" : "products"} available
           </p>
         </div>
