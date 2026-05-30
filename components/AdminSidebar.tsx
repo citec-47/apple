@@ -135,26 +135,6 @@ export default function AdminSidebar({ email, role, logoutAction }: Props) {
                   <span>View site</span>
                 </Link>
               </li>
-              <li>
-                <Link
-                  href="https://console.neon.tech"
-                  target="_blank"
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-appleGray-700 hover:bg-appleGray-100"
-                >
-                  <NavIcon icon="database" />
-                  <span>Neon console</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="https://cloudinary.com/console"
-                  target="_blank"
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-appleGray-700 hover:bg-appleGray-100"
-                >
-                  <NavIcon icon="image" />
-                  <span>Cloudinary console</span>
-                </Link>
-              </li>
             </ul>
           </div>
         </nav>
