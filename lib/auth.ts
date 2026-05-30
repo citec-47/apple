@@ -22,6 +22,11 @@ declare module "next-auth" {
 }
 
 export const authConfig: NextAuthConfig = {
+  // Trust the host header. On Vercel this means NextAuth auto-detects the
+  // real production URL from the incoming request, so we don't need
+  // AUTH_URL set as an env var. Without this, NextAuth would default to
+  // localhost:3000 and every redirect after sign-in would bounce there.
+  trustHost: true,
   session: { strategy: "jwt" },
   pages: { signIn: "/admin/login" },
   providers: [
