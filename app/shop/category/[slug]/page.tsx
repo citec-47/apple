@@ -107,6 +107,7 @@ export default async function CategoryPage({
               <label className="text-xs text-appleGray-700">Sort</label>
               <select
                 name="sort"
+                aria-label="Sort products"
                 defaultValue={sort}
                 className="rounded-full border border-appleGray-300 bg-white px-3 py-1.5 text-xs"
               >
