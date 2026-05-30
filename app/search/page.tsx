@@ -125,7 +125,7 @@ export default async function SearchPage({
                   <div className="aspect-square overflow-hidden rounded-2xl bg-white">
                     <HotlinkImage
                       src={p.heroImage ?? ""}
-                      fallback={img(400, 400, p.name, "light")}
+                      fallback={`https://picsum.photos/seed/${p.slug}/600/600`}
                       alt={p.name}
                       className="h-full w-full object-cover transition-transform group-hover:scale-105"
                       loading="lazy"
