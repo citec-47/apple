@@ -26,10 +26,11 @@ function slugify(s: string): string {
 }
 
 // ─── Image URL builder ───
-function imageFor(name: string, hex: string): string {
-  const text = encodeURIComponent(name).replace(/%20/g, "+");
-  const bg = hex.replace("#", "");
-  return `https://placehold.co/600x600/${bg}/ffffff/png?text=${text}&font=raleway`;
+// Picsum serves a real, deterministic photograph per seed (Unsplash-licensed).
+// Swap this single function to a different source (Unsplash, Pexels, Cloudinary)
+// if you ever want category-specific imagery — see scripts/update-images.ts.
+function imageFor(slug: string): string {
+  return `https://picsum.photos/seed/${encodeURIComponent(slug)}/600/600`;
 }
 
 interface Spec {
@@ -133,7 +134,7 @@ function phones(): Spec[] {
           name,
           tagline: pick(taglines, slug),
           basePriceCents: base,
-          heroImage: imageFor(`Nova ${s} ${t.label}`, "5b8def"),
+          heroImage: imageFor(slug),
           options: { storage: STORAGE_PHONE, color: colors, applecare: APPLECARE },
           isActive: true,
         });
@@ -182,7 +183,7 @@ function laptops(): Spec[] {
           name,
           tagline: pick(taglines, slug),
           basePriceCents: base,
-          heroImage: imageFor(`Nova ${s} ${t.label} ${size}"`, "7b5fee"),
+          heroImage: imageFor(slug),
           options: { chip: chips, memory: MEMORY_LAPTOP, storage: STORAGE_LAPTOP, color: colors, applecare: APPLECARE },
           isActive: true,
         });
@@ -229,7 +230,7 @@ function tablets(): Spec[] {
           name,
           tagline: pick(taglines, slug),
           basePriceCents: base,
-          heroImage: imageFor(`Nova ${s} Tab ${t.label}`, "e87ab5"),
+          heroImage: imageFor(slug),
           options: { storage: STORAGE_TAB, color: colors, applecare: APPLECARE },
           isActive: true,
         });
@@ -274,7 +275,7 @@ function watches(): Spec[] {
           name,
           tagline: pick(taglines, slug),
           basePriceCents: base,
-          heroImage: imageFor(`Nova ${s} ${t.label}`, "3ac39a"),
+          heroImage: imageFor(slug),
           options: { size: SIZE_WATCH, case: CASE_WATCH, band: BAND_WATCH, color: colors, applecare: APPLECARE },
           isActive: true,
         });
@@ -326,7 +327,7 @@ function audio(): Spec[] {
           name,
           tagline: pick(taglines, slug),
           basePriceCents: base,
-          heroImage: imageFor(`Nova ${s} ${st.label}`, "f0a14b"),
+          heroImage: imageFor(slug),
           options: { color: colors, applecare: APPLECARE },
           isActive: true,
         });
@@ -383,7 +384,7 @@ function home(): Spec[] {
             name,
             tagline: pick(taglines, slug),
             basePriceCents: base,
-            heroImage: imageFor(`Nova ${s} ${st.label}`, "9a7caa"),
+            heroImage: imageFor(slug),
             options: { color: colors, applecare: APPLECARE },
             isActive: true,
           });
@@ -445,7 +446,7 @@ function accessories(): Spec[] {
             name,
             tagline: pick(taglines, slug),
             basePriceCents: base,
-            heroImage: imageFor(`Nova ${s} ${st.label}`, "4ec5d6"),
+            heroImage: imageFor(slug),
             options: { color: colors },
             isActive: true,
           });
