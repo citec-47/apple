@@ -16,6 +16,7 @@
     "set-role": "tsx scripts/set-role.ts",
     "db:rebrand": "tsx scripts/rebrand-products.ts",
     "db:generate-catalog": "tsx scripts/generate-catalog.ts",
+    "db:retail-catalog": "tsx scripts/generate-retail-catalog.ts",
     "db:update-images": "tsx scripts/update-images.ts"
   },
   "dependencies": {
