@@ -29,6 +29,7 @@ export default async function OrdersPage() {
   );
   const pendingCount = (stats.rows ?? []).find((r) => r.status === "pending_payment")?.n ?? 0;
   const fulfilledCount = (stats.rows ?? []).find((r) => r.status === "fulfilled")?.n ?? 0;
+  const newCount = all.filter((o) => !o.viewedAt).length;
 
   const itemsByOrder = await db
     .select({ orderId: orderItems.orderId, c: count() })
@@ -46,7 +47,8 @@ export default async function OrdersPage() {
         </div>
       </div>
 
-      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <StatCard label="New (unopened)" value={newCount.toString()} tone="bg-red-100 text-red-700" />
         <StatCard label="Pending payment" value={pendingCount.toString()} tone="bg-yellow-100 text-yellow-800" />
         <StatCard label="Fulfilled" value={fulfilledCount.toString()} tone="bg-green-100 text-green-800" />
         <StatCard label="Total revenue" value={formatMoney(totalRevenue)} tone="bg-appleBlue/10 text-appleBlue" />
@@ -71,10 +73,18 @@ export default async function OrdersPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-appleGray-200">
-              {all.map((o) => (
-                <tr key={o.id} className="hover:bg-appleGray-50">
+              {all.map((o) => {
+                const isNew = !o.viewedAt;
+                return (
+                <tr key={o.id} className={isNew ? "bg-red-50/60 hover:bg-red-50" : "hover:bg-appleGray-50"}>
                   <td className="px-5 py-4">
-                    <Link href={`/admin/orders/${o.id}`} className="font-mono text-xs font-semibold text-appleBlue hover:underline">
+                    <Link href={`/admin/orders/${o.id}`} className="flex items-center gap-2 font-mono text-xs font-semibold text-appleBlue hover:underline">
+                      {isNew && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-red-600 px-2 py-0.5 font-sans text-[10px] font-bold uppercase tracking-wide text-white">
+                          <span className="h-1.5 w-1.5 rounded-full bg-white" aria-hidden="true" />
+                          New
+                        </span>
+                      )}
                       {o.orderNumber}
                     </Link>
                   </td>
@@ -104,6 +114,7 @@ export default async function OrdersPage() {
                       <select
                         name="status"
                         defaultValue={o.status}
+                        aria-label={`Status for order ${o.orderNumber}`}
                         className="rounded-lg border border-appleGray-300 bg-white px-2 py-1 text-xs"
                       >
                         <option value="pending_payment">Pending payment</option>
@@ -118,7 +129,8 @@ export default async function OrdersPage() {
                     </form>
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>

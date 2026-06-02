@@ -68,6 +68,8 @@ export const orders = pgTable("orders", {
   taxCents: integer("tax_cents").notNull().default(0),
   shippingCents: integer("shipping_cents").notNull().default(0),
   totalCents: integer("total_cents").notNull(),
+  // null = the admin hasn't opened this order yet (drives the "new order" badge)
+  viewedAt: timestamp("viewed_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });

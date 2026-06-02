@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface NavItem {
   label: string;
@@ -24,12 +24,66 @@ const NAV: NavItem[] = [
 interface Props {
   email: string;
   role: string;
+  initialUnreadOrders: number;
   logoutAction: () => Promise<void>;
 }
 
-export default function AdminSidebar({ email, role, logoutAction }: Props) {
+export default function AdminSidebar({ email, role, initialUnreadOrders, logoutAction }: Props) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [unreadOrders, setUnreadOrders] = useState(initialUnreadOrders);
+  const [toast, setToast] = useState<string | null>(null);
+  const prevUnread = useRef(initialUnreadOrders);
+
+  // Poll for new orders: updates the badge live and pops a toast when the
+  // unopened count rises. Re-polls on navigation so the badge clears promptly
+  // after an order is opened.
+  useEffect(() => {
+    let active = true;
+    async function poll() {
+      try {
+        const res = await fetch("/api/admin/orders/unread-count", { cache: "no-store" });
+        if (!res.ok || !active) return;
+        const data = (await res.json()) as { count?: number };
+        if (!active || typeof data.count !== "number") return;
+        setUnreadOrders(data.count);
+        if (data.count > prevUnread.current) {
+          const delta = data.count - prevUnread.current;
+          setToast(`🛎️ ${delta} new order${delta > 1 ? "s" : ""} just came in`);
+          if (typeof window !== "undefined" && "Notification" in window && Notification.permission === "granted") {
+            try {
+              new Notification("New order received", { body: `${data.count} order(s) waiting to be opened.` });
+            } catch {
+              /* notifications best-effort */
+            }
+          }
+        }
+        prevUnread.current = data.count;
+      } catch {
+        /* network hiccup — try again next tick */
+      }
+    }
+    poll();
+    const id = setInterval(poll, 25000);
+    return () => {
+      active = false;
+      clearInterval(id);
+    };
+  }, [pathname]);
+
+  // Ask once for permission so desktop notifications can fire later.
+  useEffect(() => {
+    if (typeof window !== "undefined" && "Notification" in window && Notification.permission === "default") {
+      Notification.requestPermission().catch(() => {});
+    }
+  }, []);
+
+  // Auto-dismiss the toast.
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 7000);
+    return () => clearTimeout(t);
+  }, [toast]);
 
   return (
     <>
@@ -115,6 +169,14 @@ export default function AdminSidebar({ email, role, logoutAction }: Props) {
                   >
                     <NavIcon icon={item.icon} />
                     <span>{item.label}</span>
+                    {item.href === "/admin/orders" && unreadOrders > 0 && (
+                      <span
+                        className="ml-auto inline-flex min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-[11px] font-bold leading-none text-white"
+                        title={`${unreadOrders} new order(s)`}
+                      >
+                        {unreadOrders > 99 ? "99+" : unreadOrders}
+                      </span>
+                    )}
                   </Link>
                 </li>
               );
@@ -164,6 +226,34 @@ export default function AdminSidebar({ email, role, logoutAction }: Props) {
           </form>
         </div>
       </aside>
+
+      {/* New-order toast notification */}
+      {toast && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-6 right-6 z-[60] flex max-w-sm items-center gap-3 rounded-2xl bg-appleGray-900 px-5 py-4 text-white shadow-2xl ring-1 ring-black/10"
+        >
+          <span className="text-sm font-medium">{toast}</span>
+          <Link
+            href="/admin/orders"
+            onClick={() => setToast(null)}
+            className="shrink-0 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-appleGray-900 hover:bg-appleGray-100"
+          >
+            View
+          </Link>
+          <button
+            type="button"
+            onClick={() => setToast(null)}
+            aria-label="Dismiss notification"
+            className="shrink-0 rounded-full p-1 text-white/70 hover:bg-white/10 hover:text-white"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+              <path strokeLinecap="round" d="M6 6l12 12M6 18L18 6" />
+            </svg>
+          </button>
+        </div>
+      )}
     </>
   );
 }

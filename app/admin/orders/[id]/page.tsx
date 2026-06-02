@@ -29,6 +29,11 @@ export default async function AdminOrderDetailPage({
   const order = await db.query.orders.findFirst({ where: eq(orders.id, orderId) });
   if (!order) notFound();
 
+  // Opening the order clears its "new" sign for the admin.
+  if (!order.viewedAt) {
+    await db.update(orders).set({ viewedAt: new Date() }).where(eq(orders.id, orderId));
+  }
+
   const items = await db.select().from(orderItems).where(eq(orderItems.orderId, orderId));
 
   // Look up the live products behind each line so we can show the image and a

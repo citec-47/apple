@@ -92,6 +92,12 @@ async function main() {
   `);
   console.log("✓ visitors table ready");
 
+  // Track whether the admin has opened an order yet (for the "new order" badge).
+  await db.execute(sql`
+    ALTER TABLE "orders" ADD COLUMN IF NOT EXISTS "viewed_at" timestamp with time zone;
+  `);
+  console.log("✓ orders.viewed_at column ready");
+
   await db.execute(sql`
     CREATE TABLE IF NOT EXISTS "support_messages" (
       "id" serial PRIMARY KEY NOT NULL,
