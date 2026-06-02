@@ -57,10 +57,16 @@ function slugify(s: string): string {
 function markupPct(slug: string): number {
   return 20 + (hash(slug + "·markup") % 31); // 20..50
 }
-/** Apply markup to a retail price and round to a tidy ".99" ending. */
+/**
+ * Apply markup to a retail price, round to a tidy ".99" ending, then clamp into
+ * the [+20%, +50%] band so the rounding can never push a (cheap) item outside.
+ */
 function markUp(retailCents: number, slug: string): number {
+  const lo = Math.ceil(retailCents * 1.2); // never below +20%
+  const hi = Math.floor(retailCents * 1.5); // never above +50%
   const marked = retailCents * (1 + markupPct(slug) / 100);
-  return Math.max(99, Math.round(marked / 100) * 100 - 1);
+  const dotted = Math.round(marked / 100) * 100 - 1; // tidy .99 ending
+  return Math.max(99, Math.min(Math.max(dotted, lo), hi));
 }
 function imageFor(slug: string): string {
   return `https://picsum.photos/seed/${encodeURIComponent(slug)}/600/600`;
@@ -561,7 +567,13 @@ async function main() {
   let inserted = 0;
   for (let i = 0; i < specs.length; i += BATCH) {
     const slice = specs.slice(i, i + BATCH);
-    await db.insert(products).values(slice).onConflictDoNothing({ target: products.slug });
+    await db
+      .insert(products)
+      .values(slice)
+      .onConflictDoUpdate({
+        target: products.slug,
+        set: { basePriceCents: sql`excluded.base_price_cents`, updatedAt: new Date() },
+      });
     inserted += slice.length;
     process.stdout.write(`\r  upserted ${inserted}/${specs.length}…`);
   }
