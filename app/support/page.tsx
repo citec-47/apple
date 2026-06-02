@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { submitSupportMessageAction } from "@/lib/support";
 
 const PRODUCT_TILES = [
   { label: "iPhone", icon: "iphone" as const },
@@ -73,7 +74,12 @@ const ALERTS = [
   },
 ];
 
-export default function SupportPage() {
+export default async function SupportPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ sent?: string }>;
+}) {
+  const { sent } = await searchParams;
   return (
     <div className="bg-appleGray-100">
       {/* Hero */}
@@ -302,21 +308,77 @@ export default function SupportPage() {
         </div>
       </section>
 
-      {/* Contact strip */}
-      <section className="bg-white py-16 text-center">
-        <div className="mx-auto max-w-apple px-6">
-          <h2 className="text-2xl font-semibold text-appleGray-900 reveal">
-            Need more help?
-          </h2>
-          <p className="mt-3 text-appleGray-700 reveal delay-1">
-            Talk to an Apple Specialist by chat, email or phone.
-          </p>
-          <Link
-            href="#"
-            className="mt-6 inline-flex btn-pill btn-pill-primary reveal delay-2"
-          >
-            Contact Apple Support
-          </Link>
+      {/* Contact form — goes to the admin Messages inbox */}
+      <section id="contact" className="scroll-mt-24 bg-white py-16">
+        <div className="mx-auto max-w-2xl px-6">
+          <div className="text-center">
+            <h2 className="text-2xl font-semibold text-appleGray-900 reveal">Need more help?</h2>
+            <p className="mt-3 text-appleGray-700 reveal delay-1">
+              Send us a message and our team will get back to you by email.
+            </p>
+          </div>
+
+          {sent === "1" && (
+            <div className="mt-8 rounded-2xl border border-green-200 bg-green-50 p-5 text-center">
+              <p className="font-semibold text-green-800">Thanks — your message has been sent.</p>
+              <p className="mt-1 text-sm text-green-700">
+                We&apos;ve received it and will reply to your email shortly.
+              </p>
+            </div>
+          )}
+          {sent === "error" && (
+            <div className="mt-8 rounded-2xl border border-red-200 bg-red-50 p-5 text-center">
+              <p className="font-semibold text-red-800">Please fill in your name, email, and message.</p>
+            </div>
+          )}
+
+          <form action={submitSupportMessageAction} className="mt-8 space-y-4 rounded-3xl bg-appleGray-100 p-8">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div>
+                <label htmlFor="name" className="text-sm font-medium text-appleGray-900">Name</label>
+                <input
+                  id="name"
+                  name="name"
+                  required
+                  autoComplete="name"
+                  className="mt-1 w-full rounded-xl border border-appleGray-300 bg-white px-4 py-3 text-base focus:border-appleBlue focus:outline-none"
+                />
+              </div>
+              <div>
+                <label htmlFor="email" className="text-sm font-medium text-appleGray-900">Email</label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  autoComplete="email"
+                  className="mt-1 w-full rounded-xl border border-appleGray-300 bg-white px-4 py-3 text-base focus:border-appleBlue focus:outline-none"
+                />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="subject" className="text-sm font-medium text-appleGray-900">Subject <span className="text-appleGray-500">(optional)</span></label>
+              <input
+                id="subject"
+                name="subject"
+                className="mt-1 w-full rounded-xl border border-appleGray-300 bg-white px-4 py-3 text-base focus:border-appleBlue focus:outline-none"
+              />
+            </div>
+            <div>
+              <label htmlFor="message" className="text-sm font-medium text-appleGray-900">How can we help?</label>
+              <textarea
+                id="message"
+                name="message"
+                rows={5}
+                required
+                placeholder="Tell us about your order, a product question, or an issue…"
+                className="mt-1 w-full rounded-xl border border-appleGray-300 bg-white px-4 py-3 text-base focus:border-appleBlue focus:outline-none"
+              />
+            </div>
+            <button type="submit" className="btn-pill btn-pill-primary w-full justify-center">
+              Send message
+            </button>
+          </form>
         </div>
       </section>
     </div>

@@ -92,6 +92,21 @@ async function main() {
   `);
   console.log("✓ visitors table ready");
 
+  await db.execute(sql`
+    CREATE TABLE IF NOT EXISTS "support_messages" (
+      "id" serial PRIMARY KEY NOT NULL,
+      "name" varchar(200) NOT NULL,
+      "email" varchar(255) NOT NULL,
+      "subject" varchar(200),
+      "message" text NOT NULL,
+      "status" varchar(32) DEFAULT 'new' NOT NULL,
+      "admin_reply" text,
+      "replied_at" timestamp with time zone,
+      "created_at" timestamp with time zone DEFAULT now() NOT NULL
+    );
+  `);
+  console.log("✓ support_messages table ready");
+
   const result = await db.execute<{ n: number }>(sql`SELECT count(*)::int AS n FROM products;`);
   console.log(`✓ products currently has ${result.rows?.[0]?.n ?? 0} row(s)`);
 }

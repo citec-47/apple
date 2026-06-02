@@ -100,6 +100,22 @@ export const orderItems = pgTable("order_items", {
 export type OrderItem = typeof orderItems.$inferSelect;
 export type NewOrderItem = typeof orderItems.$inferInsert;
 
+/* ───── Support messages ───── */
+export const supportMessages = pgTable("support_messages", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 200 }).notNull(),
+  email: varchar("email", { length: 255 }).notNull(),
+  subject: varchar("subject", { length: 200 }),
+  message: text("message").notNull(),
+  status: varchar("status", { length: 32 }).notNull().default("new"), // new | replied | archived
+  adminReply: text("admin_reply"),
+  repliedAt: timestamp("replied_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export type SupportMessage = typeof supportMessages.$inferSelect;
+export type NewSupportMessage = typeof supportMessages.$inferInsert;
+
 /* ───── Visitors ───── */
 export const visitors = pgTable("visitors", {
   id: serial("id").primaryKey(),

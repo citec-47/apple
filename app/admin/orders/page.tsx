@@ -74,7 +74,7 @@ export default async function OrdersPage() {
               {all.map((o) => (
                 <tr key={o.id} className="hover:bg-appleGray-50">
                   <td className="px-5 py-4">
-                    <Link href={`/order/${o.orderNumber}`} target="_blank" className="font-mono text-xs font-semibold text-appleBlue hover:underline">
+                    <Link href={`/admin/orders/${o.id}`} className="font-mono text-xs font-semibold text-appleBlue hover:underline">
                       {o.orderNumber}
                     </Link>
                   </td>
@@ -84,7 +84,11 @@ export default async function OrdersPage() {
                       <p className="text-xs text-appleGray-700">{o.customerEmail}</p>
                     </div>
                   </td>
-                  <td className="px-5 py-4 text-appleGray-700">{itemCount.get(o.id) ?? 0}</td>
+                  <td className="px-5 py-4">
+                    <Link href={`/admin/orders/${o.id}`} className="text-appleBlue hover:underline">
+                      {itemCount.get(o.id) ?? 0} {(itemCount.get(o.id) ?? 0) === 1 ? "item" : "items"} →
+                    </Link>
+                  </td>
                   <td className="px-5 py-4 font-semibold">{formatMoney(o.totalCents)}</td>
                   <td className="px-5 py-4">
                     <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_STYLES[o.status] ?? "bg-appleGray-200 text-appleGray-700"}`}>

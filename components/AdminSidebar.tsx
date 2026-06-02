@@ -14,6 +14,7 @@ const NAV: NavItem[] = [
   { label: "Dashboard", href: "/admin", icon: "dashboard" },
   { label: "Products", href: "/admin/products", icon: "box" },
   { label: "Orders", href: "/admin/orders", icon: "receipt" },
+  { label: "Messages", href: "/admin/messages", icon: "mail" },
   { label: "Visitors", href: "/admin/visitors", icon: "globe" },
   { label: "Media", href: "/admin/media", icon: "image" },
   { label: "Users", href: "/admin/users", icon: "users" },
@@ -176,6 +177,7 @@ type IconKey =
   | "gear"
   | "external"
   | "database"
+  | "mail"
   | "globe";
 
 function NavIcon({ icon }: { icon: IconKey }) {
@@ -254,6 +256,13 @@ function NavIcon({ icon }: { icon: IconKey }) {
           <ellipse cx="12" cy="5" rx="9" ry="3" />
           <path d="M3 5v6c0 1.66 4 3 9 3s9-1.34 9-3V5" />
           <path d="M3 11v6c0 1.66 4 3 9 3s9-1.34 9-3v-6" />
+        </svg>
+      );
+    case "mail":
+      return (
+        <svg {...props}>
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <path d="M3 7l9 6 9-6" />
         </svg>
       );
     case "globe":

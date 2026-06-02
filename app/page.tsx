@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 import { db } from "@/db/client";
-import { products } from "@/db/schema";
+import { products, type Product } from "@/db/schema";
 import { BRAND, CATEGORIES } from "@/lib/brand";
 import { formatMoney } from "@/lib/money";
 import HotlinkImage from "@/components/HotlinkImage";
@@ -9,13 +9,28 @@ import { HOMEPAGE_HERO, CATEGORY_HEROES } from "@/lib/hero-images";
 
 export const dynamic = "force-dynamic";
 
-export default async function HomePage() {
-  const featured = await db
+// A randomized, premium-leaning slice of a category for the homepage showcases.
+async function showcase(category: string, limit = 12): Promise<Product[]> {
+  return db
     .select()
     .from(products)
-    .where(eq(products.isActive, true))
-    .orderBy(desc(products.createdAt))
-    .limit(8);
+    .where(and(eq(products.category, category), eq(products.isActive, true)))
+    .orderBy(sql`random()`)
+    .limit(limit);
+}
+
+export default async function HomePage() {
+  const [featured, phones, laptops, watches] = await Promise.all([
+    db
+      .select()
+      .from(products)
+      .where(eq(products.isActive, true))
+      .orderBy(desc(products.createdAt))
+      .limit(8),
+    showcase("phones"),
+    showcase("laptops"),
+    showcase("watches"),
+  ]);
 
   return (
     <div className="bg-white">
@@ -134,6 +149,32 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Category showcases — lots of phones, laptops, watches */}
+      <ProductStrip
+        title="Phones for every budget"
+        subtitle="Flagships to everyday 5G — hundreds in stock."
+        accent="#5b8def"
+        href="/shop/category/phones"
+        products={phones}
+        tone="bg-white"
+      />
+      <ProductStrip
+        title="Laptops to get it done"
+        subtitle="Ultrabooks, 2-in-1s, and gaming rigs."
+        accent="#7b5fee"
+        href="/shop/category/laptops"
+        products={laptops}
+        tone="bg-appleGray-100"
+      />
+      <ProductStrip
+        title="Watches that keep up"
+        subtitle="Smartwatches and fitness trackers for any wrist."
+        accent="#3ac39a"
+        href="/shop/category/watches"
+        products={watches}
+        tone="bg-white"
+      />
+
       {/* Value props strip */}
       <section className="bg-appleGray-900 py-14 text-white">
         <div className="mx-auto grid max-w-appleWide grid-cols-1 gap-8 px-6 md:grid-cols-3">
@@ -182,5 +223,75 @@ export default async function HomePage() {
         </div>
       </section>
     </div>
+  );
+}
+
+function ProductStrip({
+  title,
+  subtitle,
+  accent,
+  href,
+  products,
+  tone,
+}: {
+  title: string;
+  subtitle: string;
+  accent: string;
+  href: string;
+  products: Product[];
+  tone: string;
+}) {
+  if (products.length === 0) return null;
+  return (
+    <section className={`${tone} py-16`}>
+      <div className="mx-auto max-w-appleWide px-6">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <span
+              className="inline-block h-1.5 w-10 rounded-full"
+              style={{ backgroundColor: accent }}
+            />
+            <h2 className="mt-3 text-3xl font-semibold text-appleGray-900">{title}</h2>
+            <p className="mt-2 text-appleGray-700">{subtitle}</p>
+          </div>
+          <Link href={href} className="hidden shrink-0 text-sm font-medium hover:underline md:inline" style={{ color: accent }}>
+            See all →
+          </Link>
+        </div>
+
+        <div className="-mx-6 mt-8 overflow-x-auto px-6 pb-4">
+          <ul className="flex min-w-max gap-4 snap-x">
+            {products.map((p) => (
+              <li key={p.id} className="w-[220px] shrink-0 snap-start md:w-[240px]">
+                <Link
+                  href={`/shop/buy/${p.slug}`}
+                  className="group flex h-full flex-col overflow-hidden rounded-3xl bg-white ring-1 ring-appleGray-200 transition-shadow hover:shadow-lg"
+                >
+                  <div className="aspect-square overflow-hidden bg-appleGray-100">
+                    <HotlinkImage
+                      src={p.heroImage ?? ""}
+                      fallback={`https://picsum.photos/seed/${p.slug}/400/400`}
+                      alt={p.name}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="flex flex-1 flex-col p-4">
+                    <h3 className="line-clamp-2 text-sm font-semibold text-appleGray-900">{p.name}</h3>
+                    <p className="mt-1 line-clamp-1 text-xs text-appleGray-600">{p.tagline ?? ""}</p>
+                    <p className="mt-3 text-sm font-semibold text-appleGray-900">
+                      From {formatMoney(p.basePriceCents)}
+                    </p>
+                    <span className="mt-2 inline-block text-xs font-medium group-hover:underline" style={{ color: accent }}>
+                      Buy →
+                    </span>
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
   );
 }
