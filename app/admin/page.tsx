@@ -27,7 +27,8 @@ export default async function AdminDashboard() {
   const [p] = await db.select({ n: sql<number>`count(*)::int` }).from(products);
   const [o] = await db.select({
     n: sql<number>`count(*)::int`,
-    total: sql<number>`coalesce(sum(total_cents), 0)::bigint`,
+    // Net revenue: refunded and cancelled orders are excluded (money not kept).
+    total: sql<number>`coalesce(sum(total_cents) filter (where status not in ('refunded','cancelled')), 0)::bigint`,
   }).from(orders);
   const [v] = await db.select({ n: sql<number>`count(*)::int` }).from(visitors);
 

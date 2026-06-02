@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { desc, eq, sql, count } from "drizzle-orm";
+import { desc, sql, count } from "drizzle-orm";
 import { db } from "@/db/client";
 import { orders, orderItems } from "@/db/schema";
 import { formatMoney } from "@/lib/money";
@@ -23,10 +23,13 @@ export default async function OrdersPage() {
     FROM orders GROUP BY status;
   `);
 
-  const totalRevenue = (stats.rows ?? []).reduce(
-    (sum, r) => sum + Number(r.total ?? 0),
-    0
-  );
+  // Net revenue = money kept. Refunded and cancelled orders are deducted so a
+  // refund flows straight back out of the total.
+  const totalByStatus = new Map((stats.rows ?? []).map((r) => [r.status, Number(r.total ?? 0)]));
+  const refundedTotal = totalByStatus.get("refunded") ?? 0;
+  const cancelledTotal = totalByStatus.get("cancelled") ?? 0;
+  const grossTotal = Array.from(totalByStatus.values()).reduce((s, v) => s + v, 0);
+  const totalRevenue = grossTotal - refundedTotal - cancelledTotal;
   const pendingCount = (stats.rows ?? []).find((r) => r.status === "pending_payment")?.n ?? 0;
   const fulfilledCount = (stats.rows ?? []).find((r) => r.status === "fulfilled")?.n ?? 0;
   const newCount = all.filter((o) => !o.viewedAt).length;
@@ -47,10 +50,15 @@ export default async function OrdersPage() {
         </div>
       </div>
 
-      <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
         <StatCard label="New (unopened)" value={newCount.toString()} tone="bg-red-100 text-red-700" />
         <StatCard label="Pending payment" value={pendingCount.toString()} tone="bg-yellow-100 text-yellow-800" />
         <StatCard label="Fulfilled" value={fulfilledCount.toString()} tone="bg-green-100 text-green-800" />
+        <StatCard
+          label="Refunded"
+          value={refundedTotal > 0 ? `−${formatMoney(refundedTotal)}` : formatMoney(0)}
+          tone="bg-red-100 text-red-700"
+        />
         <StatCard label="Total revenue" value={formatMoney(totalRevenue)} tone="bg-appleBlue/10 text-appleBlue" />
       </div>
 
