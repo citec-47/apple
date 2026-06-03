@@ -5,6 +5,19 @@ import { db } from "@/db/client";
 import { users } from "@/db/schema";
 import { verifyPassword } from "./password";
 
+// A localhost AUTH_URL/NEXTAUTH_URL (handy for local dev) would otherwise be
+// treated by Auth.js as the canonical site URL in production too — sending
+// every post-sign-in redirect to http://localhost:3000. In production we drop
+// any localhost value so `trustHost` derives the real URL from the request.
+if (process.env.NODE_ENV === "production") {
+  for (const key of ["AUTH_URL", "NEXTAUTH_URL"] as const) {
+    const value = process.env[key];
+    if (value && /localhost|127\.0\.0\.1/.test(value)) {
+      delete process.env[key];
+    }
+  }
+}
+
 type Role = "owner" | "editor";
 
 declare module "next-auth" {
