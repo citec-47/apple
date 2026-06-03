@@ -19,7 +19,8 @@
     "db:retail-catalog": "tsx scripts/generate-retail-catalog.ts",
     "db:bulk-catalog": "tsx scripts/generate-bulk-catalog.ts",
     "db:update-images": "tsx scripts/update-images.ts",
-    "db:update-images-real": "tsx scripts/update-images-real.ts"
+    "db:update-images-real": "tsx scripts/update-images-real.ts",
+    "db:enrich-products": "tsx scripts/enrich-products.ts"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.2",

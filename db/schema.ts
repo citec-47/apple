@@ -28,8 +28,10 @@ export const products = pgTable("products", {
   category: varchar("category", { length: 50 }).notNull(), // mac, iphone, ipad, watch, airpods, tv, vision
   name: varchar("name", { length: 200 }).notNull(),
   tagline: text("tagline"),
+  description: text("description"),
   basePriceCents: integer("base_price_cents").notNull(),
   heroImage: text("hero_image"),
+  gallery: jsonb("gallery").$type<string[]>().notNull().default([]),
   options: jsonb("options").$type<ProductOptions>().notNull().default({} as ProductOptions),
   isActive: boolean("is_active").notNull().default(true),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),

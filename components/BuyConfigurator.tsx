@@ -43,6 +43,15 @@ export default function BuyConfigurator({ product }: Props) {
     return initial;
   });
 
+  // Image gallery: the hero plus any same-type photos, with a click-to-swap
+  // main preview.
+  const images = useMemo(() => {
+    const g = (product.gallery ?? []).filter(Boolean);
+    const list = g.length ? g : product.heroImage ? [product.heroImage] : [];
+    return Array.from(new Set(list));
+  }, [product.gallery, product.heroImage]);
+  const [activeImage, setActiveImage] = useState(images[0] ?? product.heroImage ?? "");
+
   const total = useMemo(() => {
     let cents = product.basePriceCents;
     for (const g of optionGroups) {
@@ -90,13 +99,48 @@ export default function BuyConfigurator({ product }: Props) {
             )}
             <div className="mt-8 overflow-hidden rounded-2xl bg-appleGray-100 p-8">
               <HotlinkImage
-                src={product.heroImage ?? ""}
-                fallback={product.heroImage ?? ""}
+                src={activeImage || product.heroImage || ""}
+                fallback={`https://picsum.photos/seed/${product.slug}/600/600`}
                 alt={product.name}
-                className="mx-auto w-full max-w-md object-contain"
+                className="mx-auto aspect-square w-full max-w-md object-cover"
                 loading="eager"
               />
             </div>
+
+            {images.length > 1 && (
+              <div className="mt-4 flex flex-wrap gap-3">
+                {images.map((src, i) => {
+                  const selected = src === activeImage;
+                  return (
+                    <button
+                      key={`${src}-${i}`}
+                      type="button"
+                      onClick={() => setActiveImage(src)}
+                      aria-label={`View image ${i + 1} of ${images.length}`}
+                      aria-pressed={selected ? "true" : "false"}
+                      className={`h-16 w-16 overflow-hidden rounded-xl bg-appleGray-100 ring-2 transition ${
+                        selected ? "ring-appleBlue" : "ring-transparent hover:ring-appleGray-300"
+                      }`}
+                    >
+                      <HotlinkImage
+                        src={src}
+                        fallback={`https://picsum.photos/seed/${product.slug}-${i}/200/200`}
+                        alt=""
+                        className="h-full w-full object-cover"
+                        loading="lazy"
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+            {product.description && (
+              <div className="mt-8">
+                <h2 className="text-sm font-semibold text-appleGray-900">About this product</h2>
+                <p className="mt-2 text-sm leading-relaxed text-appleGray-700">{product.description}</p>
+              </div>
+            )}
           </div>
 
           {/* Right — option groups */}

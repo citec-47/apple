@@ -98,6 +98,15 @@ async function main() {
   `);
   console.log("✓ orders.viewed_at column ready");
 
+  // Richer product detail: a longer description + a small image gallery.
+  await db.execute(sql`
+    ALTER TABLE "products" ADD COLUMN IF NOT EXISTS "description" text;
+  `);
+  await db.execute(sql`
+    ALTER TABLE "products" ADD COLUMN IF NOT EXISTS "gallery" jsonb DEFAULT '[]'::jsonb NOT NULL;
+  `);
+  console.log("✓ products.description + products.gallery columns ready");
+
   await db.execute(sql`
     CREATE TABLE IF NOT EXISTS "support_messages" (
       "id" serial PRIMARY KEY NOT NULL,
